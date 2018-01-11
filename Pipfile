@@ -1,0 +1,18 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+ipdb = "*"
+docutils = "*"
+
+
+[packages]
+
+django = ">=1.8"
+django-model-utils = "*"
+six = "*"
