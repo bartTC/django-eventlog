@@ -45,4 +45,4 @@ class Event(models.Model):
             message=self.message[:40])
 
     def group_label(self):
-        return self.group.hex[-5:]
+        return self.group.hex[-6:]

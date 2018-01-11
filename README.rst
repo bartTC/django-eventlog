@@ -100,13 +100,13 @@ A bit less verbose
 Email notification
 ------------------
 
-You can notify yourself via email by adding the ``send_email`` argument
+You can notify yourself via email by adding the ``send_mail`` argument
 to a log call.
 
 .. code-block:: python
 
     e.log(E.done, 'Conquered the world!', initiator='The cat',
-          send_email='the-cat@example.com')
+          send_mail='the-cat@example.com')
 
 ``@eventlog`` decorator
 -----------------------
@@ -169,6 +169,7 @@ them in a custom Django AppConfig object:
         'myproject.CustomEventLogConfig',
     ]
 
+There are more settings to override, so take a look at the ``EventLogConfig``.
 
 Tests
 =====

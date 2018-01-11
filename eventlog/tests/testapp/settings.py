@@ -8,6 +8,8 @@ SECRET_KEY = 'testsecretkey'
 
 ALLOWED_HOSTS = ['*']
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -24,7 +26,7 @@ MEDIA_URL = '/uploads/'
 ROOT_URLCONF = 'eventlog.tests.testapp.urls'
 
 INSTALLED_APPS = [
-    'eventlog.apps.EventLogConfig',
+    'eventlog',
     'eventlog.tests.testapp',
     'django.contrib.admin',
     'django.contrib.auth',

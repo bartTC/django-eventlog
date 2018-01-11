@@ -1,0 +1,29 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style type="text/css">
+.rowHighlighted {
+  background-color: #feffe2 !important;
+}
+</style>
+
+<script>
+django.jQuery(document).ready(function(){
+  django.jQuery('#result_list tbody').on('mouseenter', 'tr', function(){
+
+    // Find matching rows and highlight them
+    var label = django.jQuery('.field-group_label', this).text();
+    django.jQuery('#result_list tbody td:contains('+label+')').each(function(index, field){
+      django.jQuery(this).parent().addClass('rowHighlighted');
+    });
+
+    // Remove highlight when leaving the row
+    django.jQuery(this).on('mouseleave', function() {
+      django.jQuery('tr.rowHighlighted').removeClass('rowHighlighted');
+    });
+
+  });
+});
+</script>
+{% endblock %}
