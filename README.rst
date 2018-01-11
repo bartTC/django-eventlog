@@ -39,6 +39,8 @@ If you're using Django 1.8 or earlier 😳 you can use the ``eventlog`` app
 name here instead of the ``EventLogConfig``. But you won't be able to set
 custom event types.
 
+.. code-block:: python
+
     INSTALLED_APPS = [
         # ...
         'eventlog',
