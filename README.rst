@@ -1,7 +1,7 @@
-.. image:: https://travis-ci.org/bartTC/django-attachments.svg?branch=master
+.. image:: https://travis-ci.org/bartTC/django-eventlog.svg?branch=master
     :target: https://travis-ci.org/bartTC/django-eventlog
 
-.. image:: https://codecov.io/github/bartTC/django-attachments/coverage.svg?branch=master
+.. image:: https://codecov.io/github/bartTC/django-eventlog/coverage.svg?branch=master
     :target: https://codecov.io/github/bartTC/django-eventlog?branch=master
 
 ===============
@@ -35,41 +35,65 @@ setting and migrate the database as usual.
         'eventlog.apps.EventLogConfig',
     ]
 
-.. code-block:: bash
+If you're using Django 1.8 or earlier 😳 you can use the ``eventlog`` app
+name here instead of the ``EventLogConfig``. But you won't be able to set
+custom event types.
 
-    $ manage.py migrate
+    INSTALLED_APPS = [
+        # ...
+        'eventlog',
+    ]
 
 Usage
 =====
 
 A new Event is started by the ``Event`` object. It has two required
-arguments: The type (``EventChoices.started``, ``EventChoices.in_progress``,
-``EventChoices.done``) and a text message.
+arguments: The type and a text message. django-eventlog comes with a almost
+hand full of pre-defined type choices (but you can extend it, see below):
+
+- ``EventChoices.started``
+- ``EventChoices.in_progress``
+- ``EventChoices.done``
+- ``EventChoices.single`` (Default type if none is provided)
 
 See this example where I create two event entries in an arbitrary task
 function:
 
 .. code-block:: python
 
-    from eventlog.events import Event, EventChoices as EC
+    from eventlog.events import Event, EventChoices as E
 
     @BackgroundTask()
     def long_running_task(request):
 
         # Start a new Event.
-        e = Event(EC.started, 'Sending 100000 emails to all users.',
+        e = Event(E.started, message='Sending 100000 emails to all users.',
                   initiator=request.user.email)
 
         # ... sending 100000 totally not spam emails...
 
         # Attach further events using the log function.
-        e.log(EC.done, 'All emails sent!', initiator=request.user.email)
+        e.log(E.done, message='All emails sent!', initiator=request.user.email)
+
 
 Each event will show up in the Django Admin changelog view. If you hover over
 one, it will highlight all related events as well.
 
 .. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/screenshot.png
    :scale: 100 %
+
+A bit less verbose
+------------------
+
+.. code-block:: python
+
+    # You can also pass the type as a string if you prefer it.
+    # This is the same as above.
+    e.log('done', message='All emails sent!', initiator=request.user.email)
+
+    # You can also leave the type away, then the default type ``single``
+    # is used.
+    e.log(message='Just wanted to say hi!')
 
 Email notification
 ------------------
@@ -79,7 +103,7 @@ to a log call.
 
 .. code-block:: python
 
-    e.log(EC.done, 'Conquered the world!', initiator='The cat',
+    e.log(E.done, 'Conquered the world!', initiator='The cat',
           send_email='the-cat@example.com')
 
 ``@eventlog`` decorator
@@ -93,26 +117,33 @@ is called:
 
     from eventlog.decorators import eventlog
 
-    @eventlog(EC.single, 'Someone looked at the Contacts page!')
+    @eventlog(message='Someone looked at the Contacts page!')
     def contact_view(request, *args, **kwargs):
         return render(...)
+
+Settings
+========
+
+I decided to not provide a battery of Settings with this app and rather keep
+everything that needs adjustments in the `AppConfig`_. This is a feature
+introduced in Django 1.9 and allows you to set settings more programmatically.
 
 Custom type choices
 -------------------
 
-By default, django-eventlog comes with three default status types: ``Started``,
-``In Progress`` and ``Done``. But you can override them in a custom Django
-AppConfig object:
+By default, django-eventlog comes with some default types, but you can override
+them in a custom Django AppConfig object:
 
 .. code-block:: python
 
     # myproject/apps.py
-
     from eventlog.apps import EventLogConfig
 
     class CustomEventLogConfig(EventLogConfig):
         def event_type_choices(self):
-
+            """
+            List of event types to be used in events.
+            """
             from model_utils import Choices
             return Choices(
                 (1, 'started', 'Started'),
@@ -122,8 +153,17 @@ AppConfig object:
                 (5, 'single', 'One Time Event'),
             )
 
+        @property
+        def default_event_type(self):
+            """
+            The default event type if not provided in an event log.
+            """
+            return 5  # single
+
+
+    # settings.py
     INSTALLED_APPS = [
-        # ...
+        # Use your custom Config instead of ``eventlog.apps.EventLogConfig``
         'myproject.CustomEventLogConfig',
     ]
 
@@ -150,3 +190,5 @@ the ``django-admin`` tool with the test app settings::
     $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin
     $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin test
     $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin makemigrations --dry-run
+
+.. _AppConfig: https://docs.djangoproject.com/en/1.9/ref/applications/

@@ -10,7 +10,7 @@ class EventLogConfig(AppConfig):
     @property
     def event_type_choices(self):
         """
-        List of event types to be used in events.\
+        List of event types to be used in events.
         """
         from model_utils import Choices
         return Choices(
@@ -19,3 +19,10 @@ class EventLogConfig(AppConfig):
             (3, 'done', _('Done')),
             (4, 'single', _('Single Event')),
         )
+
+    @property
+    def default_event_type(self):
+        """
+        The default event type if not provided in an event log.
+        """
+        return 4  # single
