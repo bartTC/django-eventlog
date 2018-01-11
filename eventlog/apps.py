@@ -17,4 +17,5 @@ class EventLogConfig(AppConfig):
             (1, 'started', _('Started')),
             (2, 'in_progress', _('In Progress')),
             (3, 'done', _('Done')),
+            (4, 'single', _('Single Event')),
         )

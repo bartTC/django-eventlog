@@ -68,8 +68,11 @@ function:
 Each event will show up in the Django Admin changelog view. If you hover over
 one, it will highlight all related events as well.
 
-.. image:: docs/_static/screenshot.png
+.. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/screenshot.png
    :scale: 100 %
+
+Email notification
+------------------
 
 You can notify yourself via email by adding the ``send_email`` argument
 to a log call.
@@ -78,6 +81,24 @@ to a log call.
 
     e.log(EC.done, 'Conquered the world!', initiator='The cat',
           send_email='the-cat@example.com')
+
+``@eventlog`` decorator
+-----------------------
+
+If you want to keep track of function calls you can use the simpler ``eventlog``
+decorator. This will add an Event log entry every time the ``contact_view`` view
+is called:
+
+.. code-block:: python
+
+    from eventlog.decorators import eventlog
+
+    @eventlog(EC.single, 'Someone looked at the Contacts page!')
+    def contact_view(request, *args, **kwargs):
+        return render(...)
+
+Custom type choices
+-------------------
 
 By default, django-eventlog comes with three default status types: ``Started``,
 ``In Progress`` and ``Done``. But you can override them in a custom Django
@@ -97,7 +118,8 @@ AppConfig object:
                 (1, 'started', 'Started'),
                 (2, 'working', 'Working on it'),
                 (3, 'still', 'Still working on it'),
-                (3, 'yay', 'Yay'),
+                (4, 'yay', 'Yay!'),
+                (5, 'single', 'One Time Event'),
             )
 
     INSTALLED_APPS = [
