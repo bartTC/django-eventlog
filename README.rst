@@ -50,7 +50,7 @@ setting and migrate the database as usual.
 
 If you're using Django 1.8 or earlier 😳 you can use the ``eventlog`` app
 name here instead of the ``EventLogConfig``. But you won't be able to set
-custom event types.
+`Custom Event Types`_.
 
 .. code-block:: python
 
@@ -65,9 +65,6 @@ Usage
 A new Event group is started by the ``EventGroup`` object, which you can call
 with individual "types" similar to logging levels in Python logging.
 
-See this example where I create two event entries in an arbitrary task
-function:
-
 .. code-block:: python
 
     from eventlog.events import EventGroup
@@ -78,15 +75,15 @@ function:
     # ... sending 100000 totally not spam emails...
     e.info('All emails sent!', initiator='Mail Sender')
 
-
-Each event will show up in the Django Admin changelog view. If you hover over
-one, it will highlight all related events as well.
+This example will store two ``info`` events. Each event will show up in the
+Django Admin changelog view. If you hover over one, it will highlight all
+related events as well.
 
 .. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/screenshot.png
    :scale: 100 %
 
 Event types are pre-defined in django-eventlog, but you can define your own
-(see below). You can use them to distinct your events and also filter them in
+(see `Custom Event Types`_). You can use them to distinct your events and also filter them in
 the admin view later. For example to only see ``error`` events.
 Currently these event types are defined:
 
@@ -96,7 +93,7 @@ Currently these event types are defined:
 - ``critical``
 
 
-Email notification
+Email Notification
 ------------------
 
 You can notify yourself via email by adding the ``send_mail`` argument
@@ -141,8 +138,8 @@ I decided to not provide a battery of Settings with this app and rather keep
 everything that needs adjustments in the `AppConfig`_. This is a feature
 introduced in Django 1.9 and allows you to set settings more programmatically.
 
-Custom type choices
--------------------
+Custom Event Types
+------------------
 
 By default, django-eventlog comes with some default types, but you can override
 them in a custom Django AppConfig object:
