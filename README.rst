@@ -9,12 +9,25 @@ django-eventlog
 ===============
 
 django-eventlog is a very simple Event logger you can use to track certain
-events in your code. I use it primarily in background task queues to keep
-track if tasks executed properly.
+events in your code. Events are stored in a Django model and can be viewed
+in the Django Admin.
+
+Events can be grouped in a "Event Group" and when hovering over one item
+in the admin, all events of the same group are highlighted.
+
+.. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/screenshot.png
+   :scale: 100 %
+
+While looking similar, it's not intended to be a replacement for your regular
+Python ``logging`` facility, rather an addition to it.
+
+My intention was that users with no access to regular log files can see the
+progress and success of certain events. I use it primarily in Task Queues
+like Celery_ to inform staff user about the state of background tasks.
 
 django-eventlog stores it's data in a regular database model, so each log entry
 will trigger a SQL Insert. Therefore you should be careful using it in high
-performance and/or high volume tasks.
+performance and/or high volume environments.
 
 Installation
 ============
@@ -49,33 +62,21 @@ custom event types.
 Usage
 =====
 
-A new Event is started by the ``Event`` object. It has two required
-arguments: The type and a text message. django-eventlog comes with a almost
-hand full of pre-defined type choices (but you can extend it, see below):
-
-- ``EventChoices.started``
-- ``EventChoices.in_progress``
-- ``EventChoices.done``
-- ``EventChoices.single`` (Default type if none is provided)
+A new Event group is started by the ``EventGroup`` object, which you can call
+with individual "types" similar to logging levels in Python logging.
 
 See this example where I create two event entries in an arbitrary task
 function:
 
 .. code-block:: python
 
-    from eventlog.events import Event, EventChoices as E
+    from eventlog.events import EventGroup
 
-    @BackgroundTask()
-    def long_running_task(request):
-
-        # Start a new Event.
-        e = Event(E.started, message='Sending 100000 emails to all users.',
-                  initiator=request.user.email)
-
-        # ... sending 100000 totally not spam emails...
-
-        # Attach further events using the log function.
-        e.log(E.done, message='All emails sent!', initiator=request.user.email)
+    # Start a new Event group
+    e = EventGroup()
+    e.info('Starting to send 100000 emails to all users.', initiator='Mail Sender')
+    # ... sending 100000 totally not spam emails...
+    e.info('All emails sent!', initiator='Mail Sender')
 
 
 Each event will show up in the Django Admin changelog view. If you hover over
@@ -84,18 +85,16 @@ one, it will highlight all related events as well.
 .. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/screenshot.png
    :scale: 100 %
 
-A bit less verbose
-------------------
+Event types are pre-defined in django-eventlog, but you can define your own
+(see below). You can use them to distinct your events and also filter them in
+the admin view later. For example to only see ``error`` events.
+Currently these event types are defined:
 
-.. code-block:: python
+- ``info``
+- ``warning``
+- ``error``
+- ``critical``
 
-    # You can also pass the type as a string if you prefer it.
-    # This is the same as above.
-    e.log('done', message='All emails sent!', initiator=request.user.email)
-
-    # You can also leave the type away, then the default type ``single``
-    # is used.
-    e.log(message='Just wanted to say hi!')
 
 Email notification
 ------------------
@@ -105,11 +104,23 @@ to a log call.
 
 .. code-block:: python
 
-    e.log(E.done, 'Conquered the world!', initiator='The cat',
+    e = EventGroup()
+    e.info('Conquered the world!', initiator='The cat',
           send_mail='the-cat@example.com')
 
-``@eventlog`` decorator
------------------------
+You can also pass ``send_mail`` to the ``EventGroup`` class. This way it's
+globally enabled for all events of this group.
+
+
+.. code-block:: python
+
+    e = EventGroup(send_mail='the-cat@example.com')
+    e.info('This will send one email.')
+    e.info('This will send one email as well.')
+
+
+[WIP] ``@eventlog`` decorator
+-----------------------------
 
 If you want to keep track of function calls you can use the simpler ``eventlog``
 decorator. This will add an Event log entry every time the ``contact_view`` view
@@ -139,28 +150,28 @@ them in a custom Django AppConfig object:
 .. code-block:: python
 
     # myproject/apps.py
+    from django.utils.translation import ugettext_lazy as _
     from eventlog.apps import EventLogConfig
 
     class CustomEventLogConfig(EventLogConfig):
-        def event_type_choices(self):
-            """
-            List of event types to be used in events.
-            """
-            from model_utils import Choices
-            return Choices(
-                (1, 'started', 'Started'),
-                (2, 'working', 'Working on it'),
-                (3, 'still', 'Still working on it'),
-                (4, 'yay', 'Yay!'),
-                (5, 'single', 'One Time Event'),
-            )
-
-        @property
-        def default_event_type(self):
-            """
-            The default event type if not provided in an event log.
-            """
-            return 5  # single
+        def get_event_types(self):
+            return {
+                'info': {
+                    'label': _('Info'),
+                    'color': None,
+                    'bgcolor': None,
+                },
+                'oh_crap': {
+                    'label': _('Oh Crap!'),
+                    'color': 'red',
+                    'bgcolor': None,
+                },
+                'mail_system': {
+                    'label': _('Mail System'),
+                    'color': 'blue',
+                    'bgcolor': None,
+                },
+            }
 
 
     # settings.py
@@ -169,7 +180,13 @@ them in a custom Django AppConfig object:
         'myproject.CustomEventLogConfig',
     ]
 
-There are more settings to override, so take a look at the ``EventLogConfig``.
+    # In your code
+    e = EventGroup()
+    e.info('Hello World.')
+    e.oh_crap('Some bad happened')
+    e.mail_system('Mail sent successfully!')
+
+There are much more settings to override, take a look at the EventLogConfig_.
 
 Tests
 =====
@@ -195,3 +212,5 @@ the ``django-admin`` tool with the test app settings::
     $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin makemigrations --dry-run
 
 .. _AppConfig: https://docs.djangoproject.com/en/1.9/ref/applications/
+.. _Celery: http://www.celeryproject.org/
+.. _EventLogConfig: https://github.com/bartTC/django-eventlog/blob/master/eventlog/apps.py

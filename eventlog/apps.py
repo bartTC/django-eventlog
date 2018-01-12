@@ -7,27 +7,62 @@ class EventLogConfig(AppConfig):
     name = 'eventlog'
     verbose_name = 'EventLog'
 
+    # -- Email Notification Settings
+
+    # Fail silently if the email server does not exist or respond
     email_fail_silently = False
+
+    # From email address used when sending notifications
     email_from = settings.DEFAULT_FROM_EMAIL
-    email_subject_template = 'Event Log: {type}'
+
+    # Email subject and text body templates. This needs to be a standard
+    # Python string. You may use 'new style' format variables here.
+    #
+    # {type}      Event type, such as "Info" or "Warning".
+    # {date}      The date and time the event was triggered.
+    # {message}   The message sent with the event.
+    # {initiator} The initiator string (optional)
+    email_subject_template = _('Event Log: {type}')
     email_template = _('The Event was {type} on {date}\n\n{message}\n\n-- {initiator}')
 
-    @property
-    def event_type_choices(self):
+    def get_event_types(self):
         """
-        List of event types to be used in events.
-        """
-        from model_utils import Choices
-        return Choices(
-            (1, 'start', _('Started')),
-            (2, 'in_progress', _('In Progress')),
-            (3, 'done', _('Done')),
-            (4, 'single', _('Single Event')),
-        )
+        List of event types to be used in events. A list of dictionaries
+        in the format::
 
-    @property
-    def default_event_type(self):
+            {
+                'name': 'info',      # The method name.
+                'label': _('Info'),  # Human readable label
+                'color': None,       # Foreground Hex color used in the Admin changelist. Optional.
+                'bgcolor': None,     # Background Hex color used in the Admin changelist. Optional.
+            }
+
+        Method names must be lowercase and only contain strings, numbers and
+        underscores, but must not start with either a number or underscore.
+        The max length is 50 characters.
+
+        This is OK:  yolo, hello_world, jerry123
+        This is NOK: _yolo, 1pineappleplease,
         """
-        The default event type if not provided in an event log.
-        """
-        return self.event_type_choices.single
+        return {
+            'info': {
+                'label': _('Info'),
+                'color': None,
+                'bgcolor': None,
+            },
+            'warning': {
+                'label': _('Warning'),
+                'color': None,
+                'bgcolor': None,
+            },
+            'error': {
+                'label': _('Error'),
+                'color': 'red',
+                'bgcolor': None,
+            },
+            'critical': {
+                'label': _('Critical'),
+                'color': 'white',
+                'bgcolor': 'red',
+            },
+        }

@@ -13,6 +13,5 @@ docutils = "*"
 
 [packages]
 
-django = ">=1.8"
-django-model-utils = "*"
+Django = ">=1.8"
 six = "*"

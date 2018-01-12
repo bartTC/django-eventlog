@@ -8,37 +8,44 @@ from eventlog.models import Event as EventModel
 
 config = apps.get_app_config('eventlog')
 
-EventChoices = config.event_type_choices
 
-
-class Event(object):
+class EventGroup(object):
     """
     Enterprise Event Object Factory.
     """
     group_id = None
+    event_types = None
+    send_mail = None
 
-    def __init__(self, type=None, message=None, initiator=None, send_mail=None):
+    def __init__(self, send_mail=None):
         self.group_id = uuid4().hex
-        self.log(type, message, initiator=initiator, send_mail=send_mail)
+        self.event_types = config.get_event_types()
+        self.send_mail = send_mail
 
-    def log(self, type=None, message=None, initiator=None, send_mail=None):
+    def __getattr__(self, attr):
+        if attr in self.event_types.keys():
+            def f(*args, **kwargs):
+                print('f:', args, kwargs)
+                return self._log_event(attr, *args, **kwargs)
+            f.__name__ = attr
+            return f
+        raise AttributeError('Event type "{}" does not exist'.format(attr))
+
+    def _log_event(self, type, message, initiator=None, send_mail=None):
         """
         Log a new event entry.
         """
-        if not message:
-            raise ValueError('A message is required')
-
-        type = type or config.default_event_type
-        if not isinstance(type, int):
-            type = getattr(EventChoices, type, config.default_event_type)
-
+        print('called log event with type', type)
         event_object = EventModel.objects.create(
             type=type, group=self.group_id, message=message, initiator=initiator)
 
-        if send_mail:
-            self.send_mail(send_mail, event_object)
+        # Mail this event per email. Either if this method has it enabled,
+        # or if its globally enabled for the EventGroup.
+        mail = send_mail or self.send_mail
+        if mail:
+            self._send_mail(mail, event_object)
 
-    def send_mail(self, email, event_object):
+    def _send_mail(self, email, event_object):
         """
         Send a simple HTML email to the recipient defined in :email:.
         """
