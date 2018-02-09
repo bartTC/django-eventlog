@@ -8,7 +8,7 @@ long_description = u'\n\n'.join((
 
 setup(
     name='django-eventlog',
-    version='0.1',
+    version='0.1a',
     description='django-eventlog stores event messages in a Django model.',
     long_description=long_description,
     author='Martin Mahner',
