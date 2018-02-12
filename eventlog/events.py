@@ -4,10 +4,6 @@ from django.apps import apps
 from django.core.mail import send_mail as django_send_mail
 from django.utils.html import linebreaks
 
-from eventlog.models import Event as EventModel
-
-config = apps.get_app_config('eventlog')
-
 
 class EventGroup(object):
     """
@@ -18,8 +14,9 @@ class EventGroup(object):
     send_mail = None
 
     def __init__(self, send_mail=None):
+        self.config = apps.get_app_config('eventlog')
         self.group_id = uuid4().hex
-        self.event_types = config.get_event_types()
+        self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 
     def __getattr__(self, attr):
@@ -36,6 +33,8 @@ class EventGroup(object):
         Log a new event entry.
         """
         print('called log event with type', type)
+        # We import here to avoid a loading the models in __init__.py, before the app is registered.
+        from eventlog.models import Event as EventModel
         event_object = EventModel.objects.create(
             type=type, group=self.group_id, message=message, initiator=initiator)
 
@@ -55,8 +54,8 @@ class EventGroup(object):
             'initiator': event_object.initiator,
             'date': event_object.timestamp
         }
-        subject = config.email_subject_template.format(**context)
-        text_message = config.email_template.format(**context)
+        subject = self.config.email_subject_template.format(**context)
+        text_message = self.config.email_template.format(**context)
         html_message = '<html><body>{html}</body></html>'.format(
             html=linebreaks(text_message))
 
@@ -65,6 +64,6 @@ class EventGroup(object):
             message=text_message,
             html_message=html_message,
             recipient_list=[email],
-            from_email=config.email_from,
-            fail_silently=config.email_fail_silently
+            from_email=self.config.email_from,
+            fail_silently=self.config.email_fail_silently
         )
