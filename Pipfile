@@ -7,14 +7,17 @@ name = "pypi"
 
 [dev-packages]
 
-ipdb = "*"
-docutils = "*"
+coverage = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
+sphinx-autobuild = "*"
 
 
 [packages]
 
 django = ">=1.8"
-six = "*"
-sphinx = "*"
+
+
+[requires]
+
+python_version = "3.6"

@@ -22,7 +22,6 @@ class EventGroup(object):
     def __getattr__(self, attr):
         if attr in self.event_types.keys():
             def f(*args, **kwargs):
-                print('f:', args, kwargs)
                 return self._log_event(attr, *args, **kwargs)
             f.__name__ = attr
             return f
@@ -32,9 +31,7 @@ class EventGroup(object):
         """
         Log a new event entry.
         """
-        print('called log event with type', type)
-        # We import here to avoid a loading the models in __init__.py, before the app is registered.
-        from eventlog.models import Event as EventModel
+        EventModel = apps.get_model('eventlog', 'Event')
         event_object = EventModel.objects.create(
             type=type, group=self.group_id, message=message, initiator=initiator)
 
@@ -48,8 +45,11 @@ class EventGroup(object):
         """
         Send a simple HTML email to the recipient defined in :email:.
         """
+        type_label = self.event_types.get(event_object.type, None)
+        if not type_label:
+            return event_object.type.capitalize()
         context = {
-            'type': event_object.get_type_display(),
+            'type': type_label,
             'message': event_object.message,
             'initiator': event_object.initiator,
             'date': event_object.timestamp

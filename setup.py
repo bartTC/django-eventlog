@@ -8,14 +8,14 @@ long_description = u'\n\n'.join((
 
 setup(
     name='django-eventlog',
-    version='0.2a',
+    version='0.9',
     description='django-eventlog stores event messages in a Django model.',
     long_description=long_description,
     author='Martin Mahner',
     author_email='martin@mahner.org',
     url='https://github.com/bartTC/django-eventlog/',
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
@@ -25,16 +25,13 @@ setup(
         'Framework :: Django',
     ],
     packages=find_packages(),
-    package_data={
-        # 'eventlog': ['templates/*.*'],
-        # 'docs': ['*'],
-    },
     include_package_data=True,
     install_requires=[
         'django>=1.8',
-        'six',
     ],
     extras_require={
-        'tests': []
+        'tests': [
+            'coverage',
+        ]
     },
 )

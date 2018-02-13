@@ -1,8 +1,8 @@
 .. _settings:
 
-==================================
-Application Settings and Overrides
-==================================
+==========================
+Settings and Configuration
+==========================
 
 I decided to not provide a battery of Settings with this app and rather keep
 everything that needs adjustments in the `AppConfig`_. This is a feature

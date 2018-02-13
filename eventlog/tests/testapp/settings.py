@@ -17,8 +17,8 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = os.path.join(TESTAPP_DIR, 'static')
-MEDIA_ROOT = os.path.join(TESTAPP_DIR, 'uploads')
+STATIC_ROOT = os.path.join(TESTAPP_DIR, '.static')
+MEDIA_ROOT = os.path.join(TESTAPP_DIR, '.uploads')
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/uploads/'
@@ -26,7 +26,7 @@ MEDIA_URL = '/uploads/'
 ROOT_URLCONF = 'eventlog.tests.testapp.urls'
 
 INSTALLED_APPS = [
-    'eventlog',
+    'eventlog.apps.EventLogConfig',
     'eventlog.tests.testapp',
     'django.contrib.admin',
     'django.contrib.auth',

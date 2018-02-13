@@ -1,0 +1,37 @@
+language: python
+
+cache: pip
+
+python:
+  - 2.7
+  - 3.5
+  - 3.6
+
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings
+  matrix:
+    - DJANGO=1.8.*
+    - DJANGO=1.9.*
+    - DJANGO=1.10.*
+    - DJANGO=1.11.*
+    - DJANGO=2.0.*
+
+matrix:
+  exclude:
+    - python: 2.7
+      env: DJANGO=2.0.*
+
+before_install:
+  - pip install codecov
+
+install:
+  - pip install django==$DJANGO
+  - pip install -e .[tests]
+
+script:
+  - django-admin collectstatic --noinput -v0
+  - coverage run --append django-admin test eventlog --noinput
+
+after_success:
+- codecov

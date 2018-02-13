@@ -20,7 +20,10 @@ the ``django-admin`` tool with the test app settings::
 
     $ cd django-eventlog/
     $ pipenv install --dev
-    $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin
-    $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin test
-    $ DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings pipenv run django-admin makemigrations --dry-run
+    $ pipenv run django-admin
+    $ pipenv run django-admin test
+    $ pipenv run django-admin makemigrations --dry-run
 
+You can also run the ``runserver`` and use the ``testapp`` for visual testing::
+
+    $ pipenv run django-admin runserver

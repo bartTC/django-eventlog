@@ -1,0 +1,10 @@
+include *.lock
+include *.rst
+include LICENSE
+include Pipfile
+include tox.ini
+recursive-include docs *.png
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
+recursive-include eventlog *.html
