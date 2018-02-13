@@ -31,7 +31,7 @@ install:
 
 script:
   - django-admin collectstatic --noinput -v0
-  - coverage run --append django-admin test eventlog.tests --noinput
+  - coverage run --append $TRAVIS_BUILD_DIR/bin/django-admin test eventlog.tests --noinput
 
 after_success:
 - codecov
