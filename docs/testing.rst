@@ -8,7 +8,7 @@ Run the testsuite in your local environment using::
 
     $ cd django-eventlog/
     $ pipenv intall --dev
-    $ ./runtests.py
+    $ pipenv run django-admin test
 
 Or use tox to test against various Django and Python versions::
 
