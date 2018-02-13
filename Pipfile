@@ -11,12 +11,12 @@ coverage = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinx-autobuild = "*"
+ipdb = "*"
 
 
 [packages]
 
 django = ">=1.8"
-
 
 [requires]
 

@@ -18,6 +18,7 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ('group', 'message', 'initiator')
     list_filter = ('type', 'timestamp')
     change_list_template = 'admin/eventlog/event/change_list.html'
+    change_form_template = 'admin/eventlog/event/change_form.html'
 
     def __init__(self, *args, **kwargs):
         super(EventAdmin, self).__init__(*args, **kwargs)
@@ -28,15 +29,15 @@ class EventAdmin(admin.ModelAdmin):
     relative_timestamp.short_description = 'Time'
 
     def type_display(self, obj):
-        t = self.event_types.get(obj.type, None)
-        if not t:
-            return obj.type.capitalize()
-        s = '<span style="{color} {bgcolor}">{label}</span>'.format(
-            color='color: {0};'.format(t['color']) if t.get('color', None) else '',
-            bgcolor='padding: 1px 4px; background-color: {0};'.format(t['bgcolor']) if t.get('bgcolor', None) else '',
-            label=t['label'])
-        return mark_safe(s)
-
+        return obj.type_label
     type_display.short_description = 'Type'
+
+    def get_readonly_fields(self, request, obj=None):
+        """All fields are readonly. It's pure logging."""
+        return [i.name for i in obj._meta.get_fields()]
+
+    def has_add_permission(self, request):
+        """Nobody can add events manually. Only programatically."""
+        return False
 
 admin.site.register(Event, EventAdmin)

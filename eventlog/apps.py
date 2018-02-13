@@ -24,27 +24,27 @@ class EventLogConfig(AppConfig):
     # This is OK:  yolo, hello_world, jerry123
     # This is NOK: _yolo, 1pineappleplease,
     event_types = {
-            'info': {
-                'label': _('Info'),
-                'color': None,
-                'bgcolor': None,
-            },
-            'warning': {
-                'label': _('Warning'),
-                'color': None,
-                'bgcolor': None,
-            },
-            'error': {
-                'label': _('Error'),
-                'color': 'red',
-                'bgcolor': None,
-            },
-            'critical': {
-                'label': _('Critical'),
-                'color': 'white',
-                'bgcolor': 'red',
-            },
-        }
+        'info': {
+            'label': _('Info'),
+            'color': None,
+            'bgcolor': None,
+        },
+        'warning': {
+            'label': _('Warning'),
+            'color': None,
+            'bgcolor': None,
+        },
+        'error': {
+            'label': _('Error'),
+            'color': 'red',
+            'bgcolor': None,
+        },
+        'critical': {
+            'label': _('Critical'),
+            'color': 'white',
+            'bgcolor': 'red',
+        },
+    }
 
 
     # -- Email Notification Settings

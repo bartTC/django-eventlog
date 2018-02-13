@@ -1,0 +1,69 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n %}
+{% load humanize %}
+
+{% block extrahead %}
+{{ block.super }}
+<style type="text/css">
+.eventType {
+  padding: 1px 4px;
+}
+
+.eventTree {
+  margin: 0;
+  padding: 0;
+}
+
+.eventTree li {
+  list-style: none;
+  margin-bottom: .2em;
+  padding: .4em 1em;
+  background-color: #fafafa;
+}
+
+.eventTree li > span {
+  display: inline-block;
+}
+
+.eventTimestamp {
+  min-width: 12em;
+}
+
+.eventLabel {
+  min-width: 5em;
+}
+
+.eventInitator {
+  float: right;
+}
+</style>
+{% endblock %}
+
+{% block content_title %}<h1>{% trans "Event Group Overview" %}</h1>{% endblock %}
+
+{% block field_sets %}
+
+  <ul class="eventTree">
+    {% for event in original.get_all_group_events %}
+    <li class="{% if original.pk == event.pk %}active{% endif %}">
+      {% if forloop.first %}
+        <span class="eventTimestamp">{{ event.timestamp|date:"DATETIME_FORMAT" }}</span>
+      {% else %}
+        <span class="eventTimestamp">
+          <abbr title="{{ event.timestamp|date:"DATETIME_FORMAT" }}">
+            {% blocktrans with delay=event.timestamp_delay %}{{ delay }} later{% endblocktrans %}</abbr>
+        </span>
+      {% endif %}
+      <span class="eventLabel">{{ event.type_label }}</span>
+      <span class="eventMessage">{{ event.message }}</span>
+      {% if event.initiator %}
+      <span class="eventInitator">{% blocktrans with initiator=event.initiator %}Initiator: {{ initiator }}{% endblocktrans %}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h1 style="margin-top: 2em;">{% trans "This Event" %}</h1>
+  {{ block.super }}
+{% endblock %}
