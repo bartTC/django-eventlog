@@ -69,6 +69,9 @@ class EventLogTestCase(TestCase):
         # Regular Event
         e = EventGroup()
         e.info('Hello World')
+        e.info('Hello World 2')
+        e.error('Hello World 3')
+        e.warning('Hello World 4')
 
         # Legacy Event (Created and in database, but its type no longer valid)
         Event.objects.create(
@@ -95,6 +98,9 @@ class EventLogTestCase(TestCase):
 
         e = EventGroup()
         e.info('Hello World')
+        e.info('Hello World 2')
+        e.error('Hello World 3')
+        e.warning('Hello World 4')
 
         obj = Event.objects.first()
         User.objects.create_superuser('jon', 'jon@example.com', 'foobar')
