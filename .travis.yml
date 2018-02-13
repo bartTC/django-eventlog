@@ -30,7 +30,7 @@ install:
   - pip install -e .[tests]
 
 script:
-  - python -c "import django, sys; sys.stdout.write('Django Version to test: {}\n'.format(django.get_version()))"
+  - "python -c \"import django, sys; sys.stdout.write('Django Version to test: {}\n'.format(django.get_version()))\""
   - django-admin.py collectstatic --noinput -v0
   - coverage run --append ./runtests.py
 
