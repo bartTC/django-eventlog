@@ -4,7 +4,7 @@
 .. image:: https://codecov.io/github/bartTC/django-eventlog/coverage.svg?branch=master
     :target: https://codecov.io/github/bartTC/django-eventlog?branch=master
 
-Full documentation: https://django-eventlog.readthedocs.io/en/latest/
+Full documentation: https://docs.elephant.house/django-eventlog/
 
 ===============
 django-eventlog
