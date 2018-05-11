@@ -2,6 +2,12 @@
 Changelog
 =========
 
+1.1 (2018-05-11)
+================
+
+- Added ability to manually set a group id to make an EventGroup object
+  reusable through threads.
+
 1.0 (2018-02-13)
 ================
 

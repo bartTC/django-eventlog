@@ -4,6 +4,8 @@ from django.apps import apps
 from django.core.mail import send_mail as django_send_mail
 from django.utils.html import linebreaks
 
+def generate_group_id():
+    return uuid4().hex
 
 class EventGroup(object):
     """
@@ -13,9 +15,9 @@ class EventGroup(object):
     event_types = None
     send_mail = None
 
-    def __init__(self, send_mail=None):
+    def __init__(self, send_mail=None, group_id=None):
         self.config = apps.get_app_config('eventlog')
-        self.group_id = uuid4().hex
+        self.group_id = group_id or generate_group_id()
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 
