@@ -60,6 +60,6 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
             ]
-        }
+        },
     }
 ]

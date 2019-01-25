@@ -4,13 +4,16 @@ from django.apps import apps
 from django.core.mail import send_mail as django_send_mail
 from django.utils.html import linebreaks
 
+
 def generate_group_id():
     return uuid4().hex
+
 
 class EventGroup(object):
     """
     Enterprise Event Object Factory.
     """
+
     group_id = None
     event_types = None
     send_mail = None
@@ -23,8 +26,10 @@ class EventGroup(object):
 
     def __getattr__(self, attr):
         if attr in self.event_types.keys():
+
             def f(*args, **kwargs):
                 return self._log_event(attr, *args, **kwargs)
+
             f.__name__ = attr
             return f
         raise AttributeError('Event type "{}" does not exist'.format(attr))
@@ -35,7 +40,8 @@ class EventGroup(object):
         """
         EventModel = apps.get_model('eventlog', 'Event')
         event_object = EventModel.objects.create(
-            type=type, group=self.group_id, message=message, initiator=initiator)
+            type=type, group=self.group_id, message=message, initiator=initiator
+        )
 
         # Mail this event per email. Either if this method has it enabled,
         # or if its globally enabled for the EventGroup.
@@ -54,12 +60,13 @@ class EventGroup(object):
             'type': type_label,
             'message': event_object.message,
             'initiator': event_object.initiator,
-            'date': event_object.timestamp
+            'date': event_object.timestamp,
         }
         subject = self.config.email_subject_template.format(**context)
         text_message = self.config.email_template.format(**context)
         html_message = '<html><body>{html}</body></html>'.format(
-            html=linebreaks(text_message))
+            html=linebreaks(text_message)
+        )
 
         django_send_mail(
             subject=subject,
@@ -67,5 +74,5 @@ class EventGroup(object):
             html_message=html_message,
             recipient_list=[email],
             from_email=self.config.email_from,
-            fail_silently=self.config.email_fail_silently
+            fail_silently=self.config.email_fail_silently,
         )

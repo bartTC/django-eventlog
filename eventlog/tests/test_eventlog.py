@@ -14,6 +14,7 @@ class EventLogTestCase(TestCase):
         """Simple log item."""
         from eventlog import EventGroup
         from eventlog.models import Event
+
         e = EventGroup()
         e.info('Hello World')
         self.assertEqual(Event.objects.count(), 1)
@@ -22,6 +23,7 @@ class EventLogTestCase(TestCase):
         """Multiple log items."""
         from eventlog import EventGroup
         from eventlog.models import Event
+
         e = EventGroup()
         e.info('Hello World')
         e.error('Hello World')
@@ -32,6 +34,7 @@ class EventLogTestCase(TestCase):
     def test_invalid_type(self):
         """Calling an invalid type will raise an error."""
         from eventlog import EventGroup
+
         e = EventGroup()
         with self.assertRaises(AttributeError):
             e.doesnotexist('Hello World')
@@ -40,6 +43,7 @@ class EventLogTestCase(TestCase):
         """Send one mail per event."""
         from eventlog import EventGroup
         from eventlog.models import Event
+
         e = EventGroup()
         e.info('Hello World', send_mail='user@example.com')
         e.error('Hello World')
@@ -52,11 +56,12 @@ class EventLogTestCase(TestCase):
         """Send one mail per event."""
         from eventlog import EventGroup
         from eventlog.models import Event
+
         e = EventGroup(send_mail='user@example.com')
         e.info('Hello World')
         e.error('Hello World')
         e.warning('Hello World')
-        e.critical('Hello World') # Explicitly disabled
+        e.critical('Hello World')  # Explicitly disabled
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(len(mail.outbox), 4)
 
@@ -78,13 +83,15 @@ class EventLogTestCase(TestCase):
             type='Legacy Event',
             group=uuid4().hex,
             message='This is some info.',
-            initiator='Test Runner'
+            initiator='Test Runner',
         )
 
         User.objects.create_superuser('jon', 'jon@example.com', 'foobar')
         self.client.login(username='jon', password='foobar')
 
-        changelist_url = reverse('admin:{0}_{1}_changelist'.format('eventlog', 'event'))
+        changelist_url = reverse(
+            'admin:{0}_{1}_changelist'.format('eventlog', 'event')
+        )
         response = self.client.get(changelist_url)
 
         self.assertEqual(response.status_code, 200)
@@ -106,8 +113,9 @@ class EventLogTestCase(TestCase):
         User.objects.create_superuser('jon', 'jon@example.com', 'foobar')
         self.client.login(username='jon', password='foobar')
 
-        changelist_url = reverse('admin:{0}_{1}_change'.format('eventlog', 'event'),
-                                 args=(obj.pk,))
+        changelist_url = reverse(
+            'admin:{0}_{1}_change'.format('eventlog', 'event'), args=(obj.pk,)
+        )
         response = self.client.get(changelist_url)
 
         self.assertEqual(response.status_code, 200)

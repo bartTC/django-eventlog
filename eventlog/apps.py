@@ -23,21 +23,22 @@ class EventLogConfig(AppConfig):
     #
     # This is OK:  yolo, hello_world, jerry123
     # This is NOK: _yolo, 1pineappleplease,
+    # fmt: off
     event_types = {
         'info': {
             'label': _('Info'),
             'color': None,
-            'bgcolor': None,
+            'bgcolor': None
         },
         'warning': {
             'label': _('Warning'),
             'color': None,
-            'bgcolor': None,
+            'bgcolor': None
         },
         'error': {
             'label': _('Error'),
             'color': 'red',
-            'bgcolor': None,
+            'bgcolor': None
         },
         'critical': {
             'label': _('Critical'),
@@ -45,7 +46,7 @@ class EventLogConfig(AppConfig):
             'bgcolor': 'red',
         },
     }
-
+    # fmt: on
 
     # -- Email Notification Settings
 
@@ -63,7 +64,9 @@ class EventLogConfig(AppConfig):
     # {message}   The message sent with the event.
     # {initiator} The initiator string (optional)
     email_subject_template = _('Event Log: {type}')
-    email_template = _('The Event was {type} on {date}\n\n{message}\n\n-- {initiator}')
+    email_template = _(
+        'The Event was {type} on {date}\n\n{message}\n\n-- {initiator}'
+    )
 
     def get_event_types(self):
         """

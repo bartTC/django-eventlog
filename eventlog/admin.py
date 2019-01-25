@@ -13,8 +13,14 @@ class EventAdmin(admin.ModelAdmin):
     """
     Event Admin.
     """
-    list_display = ('relative_timestamp', 'group_label', 'type_display',
-                    'message', 'initiator')
+
+    list_display = (
+        'relative_timestamp',
+        'group_label',
+        'type_display',
+        'message',
+        'initiator',
+    )
     search_fields = ('group', 'message', 'initiator')
     list_filter = ('type', 'timestamp')
     change_list_template = 'admin/eventlog/event/change_list.html'
@@ -26,10 +32,12 @@ class EventAdmin(admin.ModelAdmin):
 
     def relative_timestamp(self, obj):
         return _('{time} ago').format(time=timesince_filter(obj.timestamp))
+
     relative_timestamp.short_description = 'Time'
 
     def type_display(self, obj):
         return obj.type_label
+
     type_display.short_description = 'Type'
 
     def get_readonly_fields(self, request, obj=None):
@@ -39,5 +47,6 @@ class EventAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         """Nobody can add events manually. Only programatically."""
         return False
+
 
 admin.site.register(Event, EventAdmin)
