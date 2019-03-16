@@ -2,11 +2,7 @@ from uuid import uuid4
 
 from django.core import mail
 from django.test import TestCase
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class EventLogTestCase(TestCase):
