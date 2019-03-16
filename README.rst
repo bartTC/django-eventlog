@@ -1,8 +1,14 @@
+.. image:: https://img.shields.io/pypi/v/django-eventlog.svg
+    :target: https://pypi.org/project/django-eventlog/
+
 .. image:: https://travis-ci.org/bartTC/django-eventlog.svg?branch=master
     :target: https://travis-ci.org/bartTC/django-eventlog
 
-.. image:: https://codecov.io/github/bartTC/django-eventlog/coverage.svg?branch=master
-    :target: https://codecov.io/github/bartTC/django-eventlog?branch=master
+.. image:: https://api.codacy.com/project/badge/Coverage/91eaf69918a54265a29fde4d73684295
+    :target: https://www.codacy.com/app/bartTC/django-eventlog
+
+.. image:: https://api.codacy.com/project/badge/Grade/91eaf69918a54265a29fde4d73684295
+    :target: https://www.codacy.com/app/bartTC/django-eventlog
 
 -----
 
