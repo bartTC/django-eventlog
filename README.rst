@@ -12,7 +12,7 @@
 
 -----
 
-📖 **Full documentation: https://docs.elephant.house/django-eventlog/**
+📖 **Full documentation: https://django-eventlog.readthedocs.io/**
 
 ===============
 django-eventlog
