@@ -16,6 +16,7 @@ black = "*"
 [scripts]
 test = "./runtests.py"
 cleanup = "sh -c \"isort -rc eventlog && black --skip-string-normalization --line-length=80 --exclude='/(migrations)/' eventlog\""
+docs = "sphinx-build docs docs/_build/html"
 
 [pipenv]
 allow_prereleases = true
