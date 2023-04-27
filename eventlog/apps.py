@@ -1,11 +1,11 @@
 from django.apps import AppConfig
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class EventLogConfig(AppConfig):
-    name = 'eventlog'
-    verbose_name = 'EventLog'
+    name = "eventlog"
+    verbose_name = "EventLog"
 
     # List of event types to be used in events. A list of dictionaries
     # in the format::
@@ -63,10 +63,8 @@ class EventLogConfig(AppConfig):
     # {date}      The date and time the event was triggered.
     # {message}   The message sent with the event.
     # {initiator} The initiator string (optional)
-    email_subject_template = _('Event Log: {type}')
-    email_template = _(
-        'The Event was {type} on {date}\n\n{message}\n\n-- {initiator}'
-    )
+    email_subject_template = _("Event Log: {type}")
+    email_template = _("The Event was {type} on {date}\n\n{message}\n\n-- {initiator}")
 
     def get_event_types(self):
         """

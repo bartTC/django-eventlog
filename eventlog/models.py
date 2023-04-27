@@ -1,14 +1,13 @@
-import re
 from datetime import datetime, timedelta
 from logging import getLogger
 
 from django.apps import apps
 from django.db import models
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 logger = getLogger(__file__)
-config = apps.get_app_config('eventlog')
+config = apps.get_app_config("eventlog")
 
 
 class EventLogManager(models.Manager):
@@ -16,9 +15,7 @@ class EventLogManager(models.Manager):
         """
         Delete all events older than <days> days.
         """
-        return self.filter(
-            timestamp__gt=datetime.now() - timedelta(days=days)
-        ).delete()
+        return self.filter(timestamp__gt=datetime.now() - timedelta(days=days)).delete()
 
 
 class Event(models.Model):
@@ -26,23 +23,21 @@ class Event(models.Model):
     Event log model.
     """
 
-    type = models.CharField(_('Event Type'), max_length=50)
-    group = models.UUIDField(_('Event Group'))
-    timestamp = models.DateTimeField(_('Timestamp'), auto_now_add=True)
-    message = models.CharField(_('Message'), max_length=500)
-    initiator = models.CharField(
-        _('Initiator'), max_length=500, blank=True, null=True
-    )
+    type = models.CharField(_("Event Type"), max_length=50)
+    group = models.UUIDField(_("Event Group"))
+    timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
+    message = models.CharField(_("Message"), max_length=500)
+    initiator = models.CharField(_("Initiator"), max_length=500, blank=True, null=True)
 
     objects = EventLogManager()
 
     class Meta:
-        ordering = ('-timestamp',)
-        verbose_name = _('Event Log')
-        verbose_name_plural = _('Event Logs')
+        ordering = ("-timestamp",)
+        verbose_name = _("Event Log")
+        verbose_name_plural = _("Event Logs")
 
     def __str__(self):
-        return '{group} - {type} - {message}...'.format(
+        return "{group} - {type} - {message}...".format(
             group=self.group_label, type=self.type, message=self.message[:40]
         )
 
@@ -70,14 +65,14 @@ class Event(models.Model):
         """
         Get all events which are in the same Event group as this event.
         """
-        qs = Event.objects.filter(group=self.group).order_by('timestamp')
+        qs = Event.objects.filter(group=self.group).order_by("timestamp")
         # Annotate the delay between events
         last = None
         for e in qs:
             if last:
                 delay = int((e.timestamp - last.timestamp).total_seconds())
                 delay_minutes, delayseconds = divmod(delay, 60)
-                e.timestamp_delay = _('{min}m {sec}s').format(
+                e.timestamp_delay = _("{min}m {sec}s").format(
                     min=delay_minutes, sec=delayseconds
                 )
             last = e

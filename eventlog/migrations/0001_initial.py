@@ -4,27 +4,41 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(max_length=50, verbose_name='Event Type')),
-                ('group', models.UUIDField(verbose_name='Event Group')),
-                ('timestamp', models.DateTimeField(auto_now_add=True, verbose_name='Timestamp')),
-                ('message', models.CharField(max_length=500, verbose_name='Message')),
-                ('initiator', models.CharField(blank=True, max_length=500, null=True, verbose_name='Initiator')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("type", models.CharField(max_length=50, verbose_name="Event Type")),
+                ("group", models.UUIDField(verbose_name="Event Group")),
+                (
+                    "timestamp",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Timestamp"),
+                ),
+                ("message", models.CharField(max_length=500, verbose_name="Message")),
+                (
+                    "initiator",
+                    models.CharField(
+                        blank=True, max_length=500, null=True, verbose_name="Initiator"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Event Log',
-                'verbose_name_plural': 'Event Logs',
-                'ordering': ('-timestamp',),
+                "verbose_name": "Event Log",
+                "verbose_name_plural": "Event Logs",
+                "ordering": ("-timestamp",),
             },
         ),
     ]

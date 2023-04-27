@@ -1,3 +1,1 @@
-from .events import EventGroup
-
-default_app_config = 'eventlog.apps.EventLogConfig'
+from .events import EventGroup  # noqa: F401 unused import

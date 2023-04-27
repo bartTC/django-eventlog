@@ -7,15 +7,16 @@ name = "pypi"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinx-autobuild = "*"
-coverage = "*"
-codacy-coverage = "*"
-ipdb = "*"
-isort = "*"
+ruff = "*"
 black = "*"
+pytest = "*"
+wheel = "*"
+setuptools = "*"
+pytest-django = "*"
 
 [scripts]
 test = "./runtests.py"
-cleanup = "sh -c \"isort -rc eventlog && black --skip-string-normalization --line-length=80 --exclude='/(migrations)/' eventlog\""
+cleanup = "sh -c \"ruff --fix eventlog && black eventlog"
 docs = "sphinx-build docs docs/_build/html"
 
 [pipenv]

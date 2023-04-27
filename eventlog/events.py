@@ -19,7 +19,7 @@ class EventGroup(object):
     send_mail = None
 
     def __init__(self, send_mail=None, group_id=None):
-        self.config = apps.get_app_config('eventlog')
+        self.config = apps.get_app_config("eventlog")
         self.group_id = group_id or generate_group_id()
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
@@ -38,7 +38,7 @@ class EventGroup(object):
         """
         Log a new event entry.
         """
-        EventModel = apps.get_model('eventlog', 'Event')
+        EventModel = apps.get_model("eventlog", "Event")
         event_object = EventModel.objects.create(
             type=type, group=self.group_id, message=message, initiator=initiator
         )
@@ -57,14 +57,14 @@ class EventGroup(object):
         if not type_label:
             return event_object.type.capitalize()
         context = {
-            'type': type_label,
-            'message': event_object.message,
-            'initiator': event_object.initiator,
-            'date': event_object.timestamp,
+            "type": type_label,
+            "message": event_object.message,
+            "initiator": event_object.initiator,
+            "date": event_object.timestamp,
         }
         subject = self.config.email_subject_template.format(**context)
         text_message = self.config.email_template.format(**context)
-        html_message = '<html><body>{html}</body></html>'.format(
+        html_message = "<html><body>{html}</body></html>".format(
             html=linebreaks(text_message)
         )
 

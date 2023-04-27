@@ -1,3 +1,5 @@
 eventlog/tests/testapp/testdb.sqlite
 docs/_build
-build
+build/
+dist/
+*.egg-info
