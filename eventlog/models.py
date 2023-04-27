@@ -38,7 +38,9 @@ class Event(models.Model):
 
     def __str__(self):
         return "{group} - {type} - {message}...".format(
-            group=self.group_label, type=self.type, message=self.message[:40]
+            group=self.group_label,
+            type=self.type,
+            message=self.message[:40],
         )
 
     @property
@@ -54,9 +56,9 @@ class Event(models.Model):
             return self.type.capitalize()
         # fmt: off
         s = '<span class="eventType" style="{color} {bgcolor}">{label}</span>'.format(
-            color='color: {0};'.format(label['color']) if label.get('color', None) else '',
-            bgcolor='background-color: {0};'.format(label['bgcolor']) if label.get('bgcolor', None) else '',
-            label=label['label']
+            color="color: {};".format(label["color"]) if label.get("color", None) else "",
+            bgcolor="background-color: {};".format(label["bgcolor"]) if label.get("bgcolor", None) else "",
+            label=label["label"],
         )
         # fmt: on
         return mark_safe(s)
@@ -73,7 +75,8 @@ class Event(models.Model):
                 delay = int((e.timestamp - last.timestamp).total_seconds())
                 delay_minutes, delayseconds = divmod(delay, 60)
                 e.timestamp_delay = _("{min}m {sec}s").format(
-                    min=delay_minutes, sec=delayseconds
+                    min=delay_minutes,
+                    sec=delayseconds,
                 )
             last = e
         return qs

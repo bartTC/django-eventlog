@@ -9,7 +9,7 @@ def generate_group_id():
     return uuid4().hex
 
 
-class EventGroup(object):
+class EventGroup:
     """
     Enterprise Event Object Factory.
     """
@@ -25,14 +25,14 @@ class EventGroup(object):
         self.send_mail = send_mail
 
     def __getattr__(self, attr):
-        if attr in self.event_types.keys():
+        if attr in self.event_types:
 
             def f(*args, **kwargs):
                 return self._log_event(attr, *args, **kwargs)
 
             f.__name__ = attr
             return f
-        raise AttributeError('Event type "{}" does not exist'.format(attr))
+        raise AttributeError(f'Event type "{attr}" does not exist')
 
     def _log_event(self, type, message, initiator=None, send_mail=None):
         """
@@ -40,7 +40,10 @@ class EventGroup(object):
         """
         EventModel = apps.get_model("eventlog", "Event")
         event_object = EventModel.objects.create(
-            type=type, group=self.group_id, message=message, initiator=initiator
+            type=type,
+            group=self.group_id,
+            message=message,
+            initiator=initiator,
         )
 
         # Mail this event per email. Either if this method has it enabled,
@@ -65,7 +68,7 @@ class EventGroup(object):
         subject = self.config.email_subject_template.format(**context)
         text_message = self.config.email_template.format(**context)
         html_message = "<html><body>{html}</body></html>".format(
-            html=linebreaks(text_message)
+            html=linebreaks(text_message),
         )
 
         django_send_mail(
@@ -76,3 +79,4 @@ class EventGroup(object):
             from_email=self.config.email_from,
             fail_silently=self.config.email_fail_silently,
         )
+        return None

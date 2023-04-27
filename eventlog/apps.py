@@ -25,25 +25,25 @@ class EventLogConfig(AppConfig):
     # This is NOK: _yolo, 1pineappleplease,
     # fmt: off
     event_types = {
-        'info': {
-            'label': _('Info'),
-            'color': None,
-            'bgcolor': None
+        "info": {
+            "label": _("Info"),
+            "color": None,
+            "bgcolor": None,
         },
-        'warning': {
-            'label': _('Warning'),
-            'color': None,
-            'bgcolor': None
+        "warning": {
+            "label": _("Warning"),
+            "color": None,
+            "bgcolor": None,
         },
-        'error': {
-            'label': _('Error'),
-            'color': 'red',
-            'bgcolor': None
+        "error": {
+            "label": _("Error"),
+            "color": "red",
+            "bgcolor": None,
         },
-        'critical': {
-            'label': _('Critical'),
-            'color': 'white',
-            'bgcolor': 'red',
+        "critical": {
+            "label": _("Critical"),
+            "color": "white",
+            "bgcolor": "red",
         },
     }
     # fmt: on

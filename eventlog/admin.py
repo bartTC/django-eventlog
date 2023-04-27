@@ -26,7 +26,7 @@ class EventAdmin(admin.ModelAdmin):
     change_form_template = "admin/eventlog/event/change_form.html"
 
     def __init__(self, *args, **kwargs):
-        super(EventAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.event_types = config.get_event_types()
 
     @admin.display(description="Time")

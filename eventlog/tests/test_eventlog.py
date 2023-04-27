@@ -63,9 +63,10 @@ class EventLogTestCase(TestCase):
 
     def test_admin_changelist(self):
         """Admin Changelist is OK"""
+        from django.contrib.auth.models import User
+
         from eventlog import EventGroup
         from eventlog.models import Event
-        from django.contrib.auth.models import User
 
         # Regular Event
         e = EventGroup()
@@ -85,7 +86,7 @@ class EventLogTestCase(TestCase):
         User.objects.create_superuser("jon", "jon@example.com", "foobar")
         self.client.login(username="jon", password="foobar")
 
-        changelist_url = reverse("admin:{0}_{1}_changelist".format("eventlog", "event"))
+        changelist_url = reverse("admin:{}_{}_changelist".format("eventlog", "event"))
         response = self.client.get(changelist_url)
 
         self.assertEqual(response.status_code, 200)
@@ -93,9 +94,10 @@ class EventLogTestCase(TestCase):
 
     def test_admin_changeform(self):
         """Admin Changeform is OK"""
+        from django.contrib.auth.models import User
+
         from eventlog import EventGroup
         from eventlog.models import Event
-        from django.contrib.auth.models import User
 
         e = EventGroup()
         e.info("Hello World")
@@ -108,7 +110,8 @@ class EventLogTestCase(TestCase):
         self.client.login(username="jon", password="foobar")
 
         changelist_url = reverse(
-            "admin:{0}_{1}_change".format("eventlog", "event"), args=(obj.pk,)
+            "admin:{}_{}_change".format("eventlog", "event"),
+            args=(obj.pk,),
         )
         response = self.client.get(changelist_url)
 
