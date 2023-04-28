@@ -1,20 +1,24 @@
 .. image:: https://img.shields.io/pypi/v/django-eventlog.svg
     :target: https://pypi.org/project/django-eventlog/
 
-.. image:: https://travis-ci.org/bartTC/django-eventlog.svg?branch=master
-    :target: https://travis-ci.org/bartTC/django-eventlog
-
-.. image:: https://api.codacy.com/project/badge/Coverage/91eaf69918a54265a29fde4d73684295
-    :target: https://www.codacy.com/app/bartTC/django-eventlog
-
-.. image:: https://api.codacy.com/project/badge/Grade/91eaf69918a54265a29fde4d73684295
-    :target: https://www.codacy.com/app/bartTC/django-eventlog
+.. image:: https://github.com/bartTC/django-eventlog/actions/workflows/push.yml/badge.svg
+    :target: https://github.com/bartTC/django-eventlog/actions/workflows/push.yml
 
 -----
 
 📖 **Full documentation: https://django-eventlog.readthedocs.io/**
 
-===============
+*Compatibility Matrix:*
+
+========= === === ==== ====
+Py/Dj     3.8 3.9 3.10 3.11
+========= === === ==== ====
+3.2 (LTS)  ✓   ✓   ✓    ✓
+4.0        ✓   ✓   ✓    ✓
+4.1        ✓   ✓   ✓    ✓
+4.2 (LTS)  ✓   ✓   ✓    ✓
+========= === === ==== ====
+
 django-eventlog
 ===============
 
