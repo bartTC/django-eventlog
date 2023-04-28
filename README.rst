@@ -45,13 +45,13 @@ Usage Example::
 Events can be grouped in a "Event Group" and when hovering over one item
 in the admin, all events of the same group are highlighted:
 
-.. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/change_list.png
+.. image:: https://github.com/bartTC/django-eventlog/raw/main/docs/_static/change_list.png
    :scale: 100 %
 
 The details view of an event will list all other events of this group so you
 can track the progress:
 
-.. image:: https://github.com/bartTC/django-eventlog/raw/master/docs/_static/change_form.png
+.. image:: https://github.com/bartTC/django-eventlog/raw/main/docs/_static/change_form.png
    :scale: 100 %
 
 .. note::
