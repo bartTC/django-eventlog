@@ -16,9 +16,7 @@ def generate_group_id() -> str:
 
 
 class EventGroup:
-    """
-    Enterprise Event Object Factory.
-    """
+    """Enterprise Event Object Factory."""
 
     event_model: type[Model] = NotImplemented
     group_id: str = NotImplemented
@@ -44,7 +42,8 @@ class EventGroup:
 
             f.__name__ = attr
             return f
-        raise AttributeError(f'Event type "{attr}" does not exist')
+        err = f'Event type "{attr}" does not exist'
+        raise AttributeError(err)
 
     def _log_event(
         self,
@@ -53,9 +52,7 @@ class EventGroup:
         initiator: str | None = None,
         send_mail: str | None = None,
     ) -> None:
-        """
-        Log a new event entry.
-        """
+        """Log a new event entry."""
         event_object = self.event_model.objects.create(
             type=event_type,
             group=self.group_id,
@@ -70,9 +67,7 @@ class EventGroup:
             self._send_mail(mail, event_object)
 
     def _send_mail(self, email: str, event_object: event_model) -> None:
-        """
-        Send a simple HTML email to the recipient defined in :email:.
-        """
+        """Send a simple HTML email to the recipient defined in :email:."""
         type_label = self.event_types.get(event_object.type, None)
         if not type_label:
             return event_object.type.capitalize()

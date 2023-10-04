@@ -18,9 +18,7 @@ config = apps.get_app_config("eventlog")
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    """
-    Event Admin.
-    """
+    """Event Admin."""
 
     list_display = (
         "relative_timestamp",
@@ -52,11 +50,7 @@ class EventAdmin(admin.ModelAdmin):
         obj: Event | None = None,
     ) -> list[str]:
         """All fields are readonly. It's pure logging."""
-        return (
-            [i.name for i in obj._meta.get_fields()]
-            if obj
-            else []  # noqa: SLF001 Private member
-        )
+        return [i.name for i in obj._meta.get_fields()] if obj else []
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Nobody can add events manually. Only programmatically."""

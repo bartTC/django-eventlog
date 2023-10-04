@@ -18,22 +18,19 @@ config = apps.get_app_config("eventlog")
 
 class EventLogManager(models.Manager):
     def purge(self, days: int = 30) -> QuerySet:
-        """
-        Delete all events older than <days> days.
-        """
+        """Delete all events older than <days> days."""
         return self.filter(
             timestamp__gt=datetime.now(tz=timezone.UTC) - timedelta(days=days),
         ).delete()
 
 
 class Event(models.Model):
-    """
-    Event log model.
-    """
+    """Event log model."""
 
-    type = models.CharField(
-        _("Event Type"), max_length=50
-    )  # noqa: A003 `type` is shadowing a python builtin
+    type = models.CharField(  # noqa: A003 `type` is shadowing a python builtin
+        _("Event Type"),
+        max_length=50,
+    )
     group = models.UUIDField(_("Event Group"))
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
     message = models.CharField(_("Message"), max_length=500)
@@ -71,12 +68,10 @@ class Event(models.Model):
             label=label["label"],
         )
         # fmt: on
-        return mark_safe(s)
+        return mark_safe(s)  # noqa: S308 mark_safe
 
     def get_all_group_events(self) -> QuerySet:
-        """
-        Get all events that are in the same Event group as this event.
-        """
+        """Get all events that are in the same Event group as this event."""
         qs = Event.objects.filter(group=self.group).order_by("timestamp")
         # Annotate the delay between events
         last = None

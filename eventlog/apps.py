@@ -12,12 +12,10 @@ class EventLogConfig(AppConfig):
     # List of event types to be used in events. A list of dictionaries
     # in the format::
     #
-    #     {
     #         'name': 'info',      # The method name.
     #         'label': _('Info'),  # Human readable label
     #         'color': None,       # Foreground Hex color used in the Admin changelist. Optional.
     #         'bgcolor': None,     # Background Hex color used in the Admin changelist. Optional.
-    #     }
     #
     # Method names must be lowercase and only contain strings, numbers and
     # underscores, but must not start with either a number or underscore.
@@ -69,8 +67,7 @@ class EventLogConfig(AppConfig):
     email_template = _("The Event was {type} on {date}\n\n{message}\n\n-- {initiator}")
 
     def get_event_types(self) -> dict:
-        """
-        All code calls this method and not `self.event_types`, so you can
+        """All code calls this method and not `self.event_types`, so you can
         programmatically create event types, if required..
         """
         return self.event_types
