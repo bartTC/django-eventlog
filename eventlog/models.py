@@ -34,7 +34,12 @@ class Event(models.Model):
     group = models.UUIDField(_("Event Group"))
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
     message = models.CharField(_("Message"), max_length=500)
-    initiator = models.CharField(_("Initiator"), max_length=500, blank=True)
+    initiator = models.CharField(  # noqa: DJ001
+        _("Initiator"),
+        max_length=500,
+        blank=True,
+        null=True,
+    )
 
     objects = EventLogManager()
 
