@@ -2,11 +2,12 @@
 Changelog
 =========
 
-1.3 (wip)
-=========
+1.3 (2023-10-04)
+================
 
 - Python 3.12 compatibility
 - Django 5.0 support
+- Type Annotations
 
 1.2 (2023-04-28)
 ================
