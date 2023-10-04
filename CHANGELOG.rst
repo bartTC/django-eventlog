@@ -2,6 +2,12 @@
 Changelog
 =========
 
+1.3 (wip)
+=========
+
+- Python 3.12 compatibility
+- Django 5.0 support
+
 1.2 (2023-04-28)
 ================
 

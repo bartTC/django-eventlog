@@ -8,7 +8,7 @@ include = '\.pyi?$'
 exclude = "migrations"
 
 [tool.ruff]
-target-version = "py37"
+target-version = "py38"
 exclude = ["migrations"]
 select = ["ALL"]
 ignore = [
