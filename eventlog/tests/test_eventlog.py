@@ -6,7 +6,7 @@ from django.urls import reverse
 
 
 class EventLogTestCase(TestCase):
-    def test_simple_log(self):
+    def test_simple_log(self) -> None:
         """Simple log item."""
         from eventlog import EventGroup
         from eventlog.models import Event
@@ -15,7 +15,7 @@ class EventLogTestCase(TestCase):
         e.info("Hello World")
         self.assertEqual(Event.objects.count(), 1)
 
-    def test_multi_log(self):
+    def test_multi_log(self) -> None:
         """Multiple log items."""
         from eventlog import EventGroup
         from eventlog.models import Event
@@ -27,7 +27,7 @@ class EventLogTestCase(TestCase):
         e.critical("Hello World")
         self.assertEqual(Event.objects.count(), 4)
 
-    def test_invalid_type(self):
+    def test_invalid_type(self) -> None:
         """Calling an invalid type will raise an error."""
         from eventlog import EventGroup
 
@@ -35,7 +35,7 @@ class EventLogTestCase(TestCase):
         with self.assertRaises(AttributeError):
             e.doesnotexist("Hello World")
 
-    def test_mail_per_event(self):
+    def test_mail_per_event(self) -> None:
         """Send one mail per event."""
         from eventlog import EventGroup
         from eventlog.models import Event
@@ -48,7 +48,7 @@ class EventLogTestCase(TestCase):
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(len(mail.outbox), 2)
 
-    def test_mail_per_group(self):
+    def test_mail_per_group(self) -> None:
         """Send one mail per event."""
         from eventlog import EventGroup
         from eventlog.models import Event
@@ -61,7 +61,7 @@ class EventLogTestCase(TestCase):
         self.assertEqual(Event.objects.count(), 4)
         self.assertEqual(len(mail.outbox), 4)
 
-    def test_admin_changelist(self):
+    def test_admin_changelist(self) -> None:
         """Admin Changelist is OK"""
         from django.contrib.auth.models import User
 
@@ -84,7 +84,9 @@ class EventLogTestCase(TestCase):
         )
 
         User.objects.create_superuser("jon", "jon@example.com", "foobar")
-        self.client.login(username="jon", password="foobar")
+        self.client.login(
+            username="jon", password="foobar"
+        )  # noqa: S106 Hardcoded password
 
         changelist_url = reverse("admin:{}_{}_changelist".format("eventlog", "event"))
         response = self.client.get(changelist_url)
@@ -92,7 +94,7 @@ class EventLogTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Hello World")
 
-    def test_admin_changeform(self):
+    def test_admin_changeform(self) -> None:
         """Admin Changeform is OK"""
         from django.contrib.auth.models import User
 
@@ -107,7 +109,9 @@ class EventLogTestCase(TestCase):
 
         obj = Event.objects.first()
         User.objects.create_superuser("jon", "jon@example.com", "foobar")
-        self.client.login(username="jon", password="foobar")
+        self.client.login(
+            username="jon", password="foobar"
+        )  # noqa: S106 Hardcoded password
 
         changelist_url = reverse(
             "admin:{}_{}_change".format("eventlog", "event"),

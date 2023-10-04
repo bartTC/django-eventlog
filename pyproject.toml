@@ -12,20 +12,20 @@ target-version = "py38"
 exclude = ["migrations"]
 select = ["ALL"]
 ignore = [
-  "A",        # Variable/Argument/Class attribute ... is shadowing a python builtin
-  "C90" ,     # Method is too complex
+  "ANN101",   # Missing type annotation for `self`
+  "ANN401",   # typing.Any is disallowed as function arg type
+  "ARG",      # Unused function/method argument
   "D",        # Missing or badly formatted docstrings
   "E501",     # Line too long (>88)
   "EM",       # Exception must not use <string format>
   "ERA001",   # Found commented-out code
+  "F403",     # unable to detect undefined names (star import)
+  "F405",     # variable defined from star imports
   "FBT",      # Flake Boolean Trap (don't use arg=True in functions)
-  "N8",       # Invalid class/method/function naming
   "PLR09",    # Too many branches, arguments, statements
   "PT009",    # Use a regular `assert` instead of unittest-style `assertEqual`
-  "RUF005",   # Consider `(list, *list) instead of concatenation
   "S101",     # Use of `assert` detected
   "S308",     # Use of `mark_safe` may expose cross-site scripting vulnerabilities
-  "SLF001",   # Private member accessed"
   "TID252",   # Relative imports from parent modules are banned (from ..foo import bar)"
   "TRY003",   # Avoid specifying long messages outside the exception class
 ]

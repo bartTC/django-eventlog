@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.apps import AppConfig
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -66,7 +68,7 @@ class EventLogConfig(AppConfig):
     email_subject_template = _("Event Log: {type}")
     email_template = _("The Event was {type} on {date}\n\n{message}\n\n-- {initiator}")
 
-    def get_event_types(self):
+    def get_event_types(self) -> dict:
         """
         All code calls this method and not `self.event_types`, so you can
         programmatically create event types, if required..

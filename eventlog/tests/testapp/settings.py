@@ -1,10 +1,10 @@
-import os
+from pathlib import Path
 
 DEBUG = True
 
-TESTAPP_DIR = os.path.abspath(os.path.dirname(__file__))
+TESTAPP_DIR = Path(__file__).resolve().parent
 
-SECRET_KEY = "testsecretkey"
+SECRET_KEY = "testsecretkey"  # noqa: S105 hardcoded password
 
 ALLOWED_HOSTS = ["*"]
 
@@ -15,12 +15,12 @@ USE_TZ = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(TESTAPP_DIR, "testdb.sqlite"),
+        "NAME": TESTAPP_DIR / "testdb.sqlite",
     },
 }
 
-STATIC_ROOT = os.path.join(TESTAPP_DIR, ".static")
-MEDIA_ROOT = os.path.join(TESTAPP_DIR, ".uploads")
+STATIC_ROOT = TESTAPP_DIR / ".static"
+MEDIA_ROOT = TESTAPP_DIR / ".uploads"
 
 STATIC_URL = "/static/"
 MEDIA_URL = "/uploads/"

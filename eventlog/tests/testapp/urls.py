@@ -5,7 +5,7 @@ from django.urls import re_path
 
 admin.autodiscover()
 
-urlpatterns = [re_path(r"^admin/", admin.site.urls)] + static(
-    settings.STATIC_URL,
-    document_root=settings.STATIC_ROOT,
-)
+urlpatterns = [
+    re_path("^admin/", admin.site.urls),
+    *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+]
