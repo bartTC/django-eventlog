@@ -19,6 +19,8 @@ DATABASES = {
     },
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 STATIC_ROOT = TESTAPP_DIR / ".static"
 MEDIA_ROOT = TESTAPP_DIR / ".uploads"
 
