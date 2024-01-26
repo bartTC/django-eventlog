@@ -31,9 +31,9 @@ class Event(models.Model):
         _("Event Type"),
         max_length=50,
     )
-    group = models.UUIDField(_("Event Group"))
+    group = models.CharField(_("Event Group"), max_length=40)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
-    message = models.CharField(_("Message"), max_length=500)
+    message = models.TextField(_("Message"))
     initiator = models.CharField(  # noqa: DJ001
         _("Initiator"),
         max_length=500,
@@ -57,7 +57,7 @@ class Event(models.Model):
 
     @property
     def group_label(self) -> str:
-        return self.group.hex[-6:]
+        return self.group
 
     @property
     def type_label(self) -> str:
