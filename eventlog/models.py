@@ -45,6 +45,10 @@ class Event(models.Model):
 
     class Meta:
         ordering = ("-timestamp",)
+        indexes = [
+                models.Index(fields=["group", "timestamp"]),
+                models.Index(fields=["timestamp"]),
+        ]
         verbose_name = _("Event Log")
         verbose_name_plural = _("Event Logs")
 
