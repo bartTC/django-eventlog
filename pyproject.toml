@@ -32,7 +32,6 @@ python_files = [
 ]
 addopts = """
     --ds=eventlog.tests.testapp.settings
-    --nomigrations
     --reuse-db
 """
 filterwarnings = ["ignore::RuntimeWarning"]
