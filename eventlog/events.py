@@ -79,9 +79,7 @@ class EventGroup:
         }
         subject = self.config.email_subject_template.format(**context)
         text_message = self.config.email_template.format(**context)
-        html_message = "<html><body>{html}</body></html>".format(
-            html=linebreaks(text_message),
-        )
+        html_message = f"<html><body>{linebreaks(text_message)}</body></html>"
 
         django_send_mail(
             subject=subject,

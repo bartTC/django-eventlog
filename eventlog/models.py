@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
-logger = getLogger(__file__)
+logger = getLogger(__name__)
 config = apps.get_app_config("eventlog")
 
 
@@ -27,7 +27,7 @@ class EventLogManager(models.Manager):
 class Event(models.Model):
     """Event log model."""
 
-    type = models.CharField(  # noqa: A003 `type` is shadowing a python builtin
+    type = models.CharField(  # `type` is shadowing a python builtin
         _("Event Type"),
         max_length=50,
     )
@@ -46,18 +46,14 @@ class Event(models.Model):
     class Meta:
         ordering = ("-timestamp",)
         indexes = [
-                models.Index(fields=["group", "timestamp"]),
-                models.Index(fields=["timestamp"]),
+            models.Index(fields=["group", "timestamp"]),
+            models.Index(fields=["timestamp"]),
         ]
         verbose_name = _("Event Log")
         verbose_name_plural = _("Event Logs")
 
     def __str__(self) -> str:
-        return "{group} - {type} - {message}...".format(
-            group=self.group_label,
-            type=self.type,
-            message=self.message[:40],
-        )
+        return f"{self.group_label} - {self.type} - {self.message[:40]}..."
 
     @property
     def group_label(self) -> str:
