@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class EventLogConfig(AppConfig):
     name = "eventlog"
     verbose_name = "EventLog"
+    default_auto_field = "django.db.models.AutoField"
 
     # List of event types to be used in events. A list of dictionaries
     # in the format::
