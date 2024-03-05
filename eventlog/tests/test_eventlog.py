@@ -1,125 +1,139 @@
 from uuid import uuid4
 
+import pytest
 from django.core import mail
-from django.test import TestCase
+from django.test import Client
 from django.urls import reverse
+from pytest_django.asserts import assertContains
 
 
-class EventLogTestCase(TestCase):
-    def test_simple_log(self) -> None:
-        """Simple log item."""
-        from eventlog import EventGroup
-        from eventlog.models import Event
+@pytest.mark.django_db()
+def test_simple_log() -> None:
+    """Simple log item."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
 
-        e = EventGroup()
-        e.info("Hello World")
-        assert Event.objects.count() == 1
+    e = EventGroup()
+    e.info("Hello World")
+    assert Event.objects.count() == 1
 
-    def test_multi_log(self) -> None:
-        """Multiple log items."""
-        from eventlog import EventGroup
-        from eventlog.models import Event
 
-        e = EventGroup()
-        e.info("Hello World")
-        e.error("Hello World")
-        e.warning("Hello World")
-        e.critical("Hello World")
-        assert Event.objects.count() == 4
+@pytest.mark.django_db()
+def test_multi_log() -> None:
+    """Multiple log items."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
 
-    def test_invalid_type(self) -> None:
-        """Calling an invalid type will raise an error."""
-        from eventlog import EventGroup
+    e = EventGroup()
+    e.info("Hello World")
+    e.error("Hello World")
+    e.warning("Hello World")
+    e.critical("Hello World")
+    assert Event.objects.count() == 4
 
-        e = EventGroup()
-        with self.assertRaises(AttributeError):
-            e.doesnotexist("Hello World")
 
-    def test_mail_per_event(self) -> None:
-        """Send one mail per event."""
-        from eventlog import EventGroup
-        from eventlog.models import Event
+@pytest.mark.django_db()
+def test_invalid_type() -> None:
+    """Calling an invalid type will raise an error."""
+    from eventlog import EventGroup
 
-        e = EventGroup()
-        e.info("Hello World", send_mail="user@example.com")
-        e.error("Hello World")
-        e.warning("Hello World")
-        e.critical("Hello World", send_mail="user@example.com")
-        assert Event.objects.count() == 4
-        assert len(mail.outbox) == 2
+    e = EventGroup()
+    with pytest.raises(AttributeError):
+        e.doesnotexist("Hello World")
 
-    def test_mail_per_group(self) -> None:
-        """Send one mail per event."""
-        from eventlog import EventGroup
-        from eventlog.models import Event
 
-        e = EventGroup(send_mail="user@example.com")
-        e.info("Hello World")
-        e.error("Hello World")
-        e.warning("Hello World")
-        e.critical("Hello World")  # Explicitly disabled
-        assert Event.objects.count() == 4
-        assert len(mail.outbox) == 4
+@pytest.mark.django_db()
+def test_mail_per_event() -> None:
+    """Send one mail per event."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
 
-    def test_admin_changelist(self) -> None:
-        """Admin Changelist is OK."""
-        from django.contrib.auth.models import User
+    e = EventGroup()
+    e.info("Hello World", send_mail="user@example.com")
+    e.error("Hello World")
+    e.warning("Hello World")
+    e.critical("Hello World", send_mail="user@example.com")
+    assert Event.objects.count() == 4
+    assert len(mail.outbox) == 2
 
-        from eventlog import EventGroup
-        from eventlog.models import Event
 
-        # Regular Event
-        e = EventGroup()
-        e.info("Hello World")
-        e.info("Hello World 2")
-        e.error("Hello World 3")
-        e.warning("Hello World 4")
+@pytest.mark.django_db()
+def test_mail_per_group() -> None:
+    """Send one mail per event."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
 
-        # Legacy Event (Created and in database, but its type no longer valid)
-        Event.objects.create(
-            type="Legacy Event",
-            group=uuid4().hex,
-            message="This is some info.",
-            initiator="Test Runner",
-        )
+    e = EventGroup(send_mail="user@example.com")
+    e.info("Hello World")
+    e.error("Hello World")
+    e.warning("Hello World")
+    e.critical("Hello World")  # Explicitly disabled
+    assert Event.objects.count() == 4
+    assert len(mail.outbox) == 4
 
-        User.objects.create_superuser("jon", "jon@example.com", "foobar")
-        self.client.login(
-            username="jon",
-            password="foobar",  # noqa: S106 Hardcoded password
-        )
 
-        changelist_url = reverse("admin:{}_{}_changelist".format("eventlog", "event"))
-        response = self.client.get(changelist_url)
+@pytest.mark.django_db()
+def test_admin_changelist(client: Client) -> None:
+    """Admin Changelist is OK."""
+    from django.contrib.auth.models import User
 
-        assert response.status_code == 200
-        self.assertContains(response, "Hello World")
+    from eventlog import EventGroup
+    from eventlog.models import Event
 
-    def test_admin_changeform(self) -> None:
-        """Admin Changeform is OK."""
-        from django.contrib.auth.models import User
+    # Regular Event
+    e = EventGroup()
+    e.info("Hello World")
+    e.info("Hello World 2")
+    e.error("Hello World 3")
+    e.warning("Hello World 4")
 
-        from eventlog import EventGroup
-        from eventlog.models import Event
+    # Legacy Event (Created and in database, but its type no longer valid)
+    Event.objects.create(
+        type="Legacy Event",
+        group=uuid4().hex,
+        message="This is some info.",
+        initiator="Test Runner",
+    )
 
-        e = EventGroup()
-        e.info("Hello World")
-        e.info("Hello World 2")
-        e.error("Hello World 3")
-        e.warning("Hello World 4")
+    User.objects.create_superuser("jon", "jon@example.com", "foobar")
+    client.login(
+        username="jon",
+        password="foobar",  # noqa: S106 Hardcoded password
+    )
 
-        obj = Event.objects.first()
-        User.objects.create_superuser("jon", "jon@example.com", "foobar")
-        self.client.login(
-            username="jon",
-            password="foobar",  # noqa: S106 Hardcoded password
-        )
+    changelist_url = reverse("admin:{}_{}_changelist".format("eventlog", "event"))
+    response = client.get(changelist_url)
 
-        changelist_url = reverse(
-            "admin:{}_{}_change".format("eventlog", "event"),
-            args=(obj.pk,),
-        )
-        response = self.client.get(changelist_url)
+    assert response.status_code == 200
+    assertContains(response, "Hello World")
 
-        assert response.status_code == 200
-        self.assertContains(response, "Hello World")
+
+@pytest.mark.django_db()
+def test_admin_changeform(client: Client) -> None:
+    """Admin Changeform is OK."""
+    from django.contrib.auth.models import User
+
+    from eventlog import EventGroup
+    from eventlog.models import Event
+
+    e = EventGroup()
+    e.info("Hello World")
+    e.info("Hello World 2")
+    e.error("Hello World 3")
+    e.warning("Hello World 4")
+
+    obj = Event.objects.first()
+    User.objects.create_superuser("jon", "jon@example.com", "foobar")
+    client.login(
+        username="jon",
+        password="foobar",  # noqa: S106 Hardcoded password
+    )
+
+    changelist_url = reverse(
+        "admin:{}_{}_change".format("eventlog", "event"),
+        args=(obj.pk,),
+    )
+    response = client.get(changelist_url)
+
+    assert response.status_code == 200
+    assertContains(response, "Hello World")
