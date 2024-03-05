@@ -2,6 +2,13 @@
 Changelog
 =========
 
+1.4 (2024-03-05)
+================
+
+- Event groups can now have arbitrary names instead of UUIDs.
+- Event comments is a textfield.
+- Fixed potential migration warnings around AutoFields.
+
 1.3 (2023-10-04)
 ================
 
