@@ -42,4 +42,3 @@ def test_no_pending_migrations_if_autofield_differs(settings: SettingsWrapper) -
     """
     settings.DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     test_no_pending_migrations()
-b i
