@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 from uuid import uuid4
 
 from django.apps import apps
@@ -34,7 +34,7 @@ class EventGroup:
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 
-    def __getattr__(self, attr: str) -> None:
+    def __getattr__(self, attr: str) -> Callable:
         if attr in self.event_types:
 
             def f(*args: Any, **kwargs: Any) -> None:
