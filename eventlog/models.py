@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from datetime import datetime, timedelta, timezone
 from logging import getLogger
 from typing import TYPE_CHECKING
@@ -58,6 +59,9 @@ class Event(models.Model):
 
     @property
     def group_label(self) -> str:
+        # If this is an UUID, shorten it to the first 6 characters
+        if re.match(r"[a-z0-9]{32}", self.group):
+            return self.group[:6]
         return self.group
 
     @property

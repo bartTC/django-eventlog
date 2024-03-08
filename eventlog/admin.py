@@ -22,7 +22,7 @@ class EventAdmin(admin.ModelAdmin):
 
     list_display = (
         "relative_timestamp",
-        "group_label",
+        "admin_group_label",
         "type_display",
         "message",
         "initiator",
@@ -36,11 +36,15 @@ class EventAdmin(admin.ModelAdmin):
         super().__init__(*args, **kwargs)
         self.event_types = config.get_event_types()
 
-    @admin.display(description="Time")
+    @admin.display(description="Group", ordering="group")
+    def admin_group_label(self, obj: Event) -> str:
+        return obj.group_label
+
+    @admin.display(description="Time", ordering="timestamp")
     def relative_timestamp(self, obj: Event) -> str:
         return _("{time} ago").format(time=timesince_filter(obj.timestamp))
 
-    @admin.display(description="Type")
+    @admin.display(description="Type", ordering="type")
     def type_display(self, obj: Event) -> str:
         return obj.type_label
 

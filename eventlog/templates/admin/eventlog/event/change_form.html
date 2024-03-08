@@ -3,65 +3,94 @@
 {% load i18n %}
 
 {% block extrahead %}
-{{ block.super }}
-<style type="text/css">
-.eventType {
-  padding: 1px 4px;
-}
+  {{ block.super }}
+  <style>
+    .eventType {
+      padding: 1px 4px;
+    }
 
-.eventTree {
-  margin: 0;
-  padding: 0;
-}
+    .eventTree {
+      margin: 0;
+      padding: 0;
+    }
 
-.eventTree li {
-  list-style: none;
-  margin-bottom: .2em;
-  padding: .4em 1em;
-  background-color: #fafafa;
-}
+    .eventTree li {
+      margin-bottom: .2em;
+      padding: .4em 1em;
+      gap: 1em;
+      display: grid;
+      grid-template-columns: 1.5fr .5fr 4fr 2fr;
+      list-style-type: none;
+      background-color: var(--darkened-bg);
+      align-items: start;
+      justify-items: start;
+    }
 
-.eventTree li > span {
-  display: inline-block;
-}
+    .eventTree li.active {
+      background-color: var(--selected-row);
+    }
 
-.eventTimestamp {
-  min-width: 12em;
-}
+    .eventTimestamp {
+      white-space: nowrap;
+    }
 
-.eventLabel {
-  min-width: 5em;
-}
+    .eventInitator {
+      text-align: right;
+      width: 100%;
+    }
 
-.eventInitator {
-  float: right;
-}
-</style>
+    .field-data .readonly {
+      white-space: pre;
+      font-family: var(--font-family-monospace);
+      font-size: 0.9em;
+      max-height: 30em;
+      width: 100%;
+      overflow: auto;
+    }
+  </style>
+
+  <script defer>
+    // Parse all 'data' fields to add JSON indentation.
+    document.addEventListener("DOMContentLoaded", function() {
+      try {
+        const dataField = document.querySelector(".field-data .readonly");
+        dataField.textContent = JSON.stringify(JSON.parse(dataField.textContent), null, 2)
+      } catch { }
+    });
+  </script>
 {% endblock %}
 
 {% block content_title %}<h1>{% trans "Event Group Overview" %}</h1>{% endblock %}
 
 {% block field_sets %}
-
-  <ul class="eventTree">
+  <ol class="eventTree">
     {% for event in original.get_all_group_events %}
-    <li class="{% if original.pk == event.pk %}active{% endif %}">
-      {% if forloop.first %}
-        <span class="eventTimestamp">{{ event.timestamp|date:"DATETIME_FORMAT" }}</span>
-      {% else %}
-        <span class="eventTimestamp">
-          <abbr title="{{ event.timestamp|date:"DATETIME_FORMAT" }}">
-            {% blocktrans with delay=event.timestamp_delay %}{{ delay }} later{% endblocktrans %}</abbr>
-        </span>
-      {% endif %}
-      <span class="eventLabel">{{ event.type_label }}</span>
-      <span class="eventMessage">{{ event.message }}</span>
-      {% if event.initiator %}
-      <span class="eventInitator">{% blocktrans with initiator=event.initiator %}Initiator: {{ initiator }}{% endblocktrans %}</span>
-      {% endif %}
-    </li>
+      <li class="{% if original.pk == event.pk %}active{% endif %}">
+        {% if forloop.first %}
+          <span class="eventTimestamp">
+            <a href="{% url "admin:eventlog_event_change" event.pk %}">
+              {{ event.timestamp|date:"DATETIME_FORMAT" }}
+            </a>
+          </span>
+        {% else %}
+          <span class="eventTimestamp">
+            <a href="{% url "admin:eventlog_event_change" event.pk %}">
+              <abbr title="{{ event.timestamp|date:"DATETIME_FORMAT" }}">
+              {% blocktrans with delay=event.timestamp_delay %}{{ delay }}
+                later{% endblocktrans %}
+              </abbr>
+            </a>
+          </span>
+        {% endif %}
+        <span class="eventLabel">{{ event.type_label }}</span>
+        <span class="eventMessage">{{ event.message }}</span>
+        {% if event.initiator %}
+          <span class="eventInitator">{% blocktrans with initiator=event.initiator %}
+            Initiator: {{ initiator }}{% endblocktrans %}</span>
+        {% endif %}
+      </li>
     {% endfor %}
-  </ul>
+  </ol>
 
   <h1 style="margin-top: 2em;">{% trans "This Event" %}</h1>
   {{ block.super }}
