@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from uuid import uuid4
 
 import pytest
@@ -133,7 +134,7 @@ def test_admin_changelist(client: Client) -> None:
     changelist_url = reverse("admin:{}_{}_changelist".format("eventlog", "event"))
     response = client.get(changelist_url)
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assertContains(response, "Hello World")
 
 
@@ -164,5 +165,5 @@ def test_admin_changeform(client: Client) -> None:
     )
     response = client.get(changelist_url)
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assertContains(response, "Hello World")
