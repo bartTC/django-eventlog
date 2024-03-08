@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Any, Callable
 from uuid import uuid4
 
@@ -51,12 +52,22 @@ class EventGroup:
         message: str,
         initiator: str | None = None,
         send_mail: str | None = None,
+        data: Any | None = None,
     ) -> None:
         """Log a new event entry."""
+
+        # Make sure, the data is JSON serizable, otherwise store it as a string.
+        if data:
+            try:
+                json.dumps(data)
+            except TypeError:
+                data = str(data)
+
         event_object = self.event_model.objects.create(
             type=event_type,
             group=self.group_id,
             message=message,
+            data=data,
             initiator=initiator,
         )
 
@@ -74,6 +85,7 @@ class EventGroup:
         context = {
             "type": type_label,
             "message": event_object.message,
+            "data": event_object.data,
             "initiator": event_object.initiator,
             "date": event_object.timestamp,
         }

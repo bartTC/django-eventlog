@@ -34,6 +34,7 @@ class Event(models.Model):
     group = models.CharField(_("Event Group"), max_length=40)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
     message = models.TextField(_("Message"))
+    data = models.JSONField(_("Data"), blank=True, null=True)
     initiator = models.CharField(  # noqa: DJ001
         _("Initiator"),
         max_length=500,

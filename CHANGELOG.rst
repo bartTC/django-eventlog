@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.5 (wip)
+=========
+
+- Event can have optional, JSON serializable data attached.
+
 1.4 (2024-03-05)
 ================
 

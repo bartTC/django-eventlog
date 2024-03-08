@@ -27,7 +27,9 @@ django-eventlog is a very simple event logger you can use to track certain
 actions in your code. Events are stored in a Django model and can be viewed
 in the Django Admin.
 
-Usage Example::
+Usage Example:
+
+.. code-block:: python
 
     from eventlog import EventGroup
 
@@ -41,6 +43,22 @@ Usage Example::
     except Exception:
         e.error('There was an error sending the emails.',
                 initiator='Mailer Daemon')
+
+
+You can reuse an event group by specifying a group name and attach optional data.
+Data must be JSON serializable.
+
+.. code-block:: python
+
+    from eventlog import EventGroup
+
+    def purchase():
+        e = EventGroup(group_id=f"Order {self.order.pk}")
+        e.info("Sent order to Shopify", data={"items": [1, 2, 3]})
+
+    def subscribe_newsletter():
+        e = EventGroup(group_id=f"Order {self.order.pk}")
+        e.info("User subscribed to newsletter on checkout", data={"email": "user@example.com"})
 
 
 Events can be grouped in a "Event Group" and when hovering over one item

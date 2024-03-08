@@ -33,6 +33,35 @@ def test_multi_log() -> None:
 
 
 @pytest.mark.django_db()
+def test_data_log() -> None:
+    """Simple log item with data."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
+
+    e = EventGroup()
+    e.info("Hello World", data={"email": "user@example.com"})
+    e.info("Hello World", data={"foo": {"bar": [1, 2, 3]}})
+    assert Event.objects.count() == 2
+
+
+@pytest.mark.django_db()
+def test_unserializable_data_log() -> None:
+    """Log item with data that's not JSON serializable."""
+    from eventlog import EventGroup
+    from eventlog.models import Event
+
+    class Foo:
+        pass
+
+    e = EventGroup()
+    e.info("Hello World", data={"foo": Foo()})
+    assert Event.objects.count() == 1
+
+    # It will be barely readable but better than failing upon a log entry.
+    assert "Foo object" in Event.objects.first().data
+
+
+@pytest.mark.django_db()
 def test_invalid_type() -> None:
     """Calling an invalid type will raise an error."""
     from eventlog import EventGroup
