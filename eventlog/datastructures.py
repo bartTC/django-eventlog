@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 
 
-@dataclass(frozen=False, kw_only=True)
+@dataclass
 class EventType:
     """
     The event type used
