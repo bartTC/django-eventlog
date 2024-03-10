@@ -1,9 +1,9 @@
 # Changelog
 
-# 2.0 (WIP)
+# 2.0 (2024-03-10)
 
 - Overall test and code refactor.
-- Documention now done with MKDocs.
+- Documentation now done with MKDocs.
 - Timeline in Admin change form now supports delays of days and hours, instead of just minutes.
 - *Backwards incompatible:* Removed undocumented ``Event.objects.purge()`` queryset method.
 - *Backwards incompatible:* The list of event types defined in the app config is now
