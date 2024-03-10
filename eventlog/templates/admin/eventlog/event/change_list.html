@@ -17,7 +17,7 @@ django.jQuery(document).ready(function(){
   django.jQuery('#result_list tbody').on('mouseenter', 'tr', function(){
 
     // Find matching rows and highlight them
-    const label = django.jQuery('.field-admin_group_label', this).text();
+    const label = django.jQuery('.field-__str__', this).text();
     django.jQuery('#result_list tbody td:contains('+label+')').each(function(index, field){
       django.jQuery(this).parent().addClass('rowHighlighted');
     });

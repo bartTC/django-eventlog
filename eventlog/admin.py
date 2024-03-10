@@ -11,6 +11,8 @@ from eventlog.models import Event
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
+    from django.template import Context
+    from django.template.response import TemplateResponse
 
 
 config = apps.get_app_config("eventlog")
@@ -22,8 +24,8 @@ class EventAdmin(admin.ModelAdmin):
 
     list_display = (
         "relative_timestamp",
-        "admin_group_label",
-        "type_display",
+        "__str__",
+        "html_label",
         "message",
         "initiator",
     )
@@ -36,17 +38,9 @@ class EventAdmin(admin.ModelAdmin):
         super().__init__(*args, **kwargs)
         self.event_types = config.get_event_types()
 
-    @admin.display(description="Group", ordering="group")
-    def admin_group_label(self, obj: Event) -> str:
-        return obj.group_label
-
     @admin.display(description="Time", ordering="timestamp")
     def relative_timestamp(self, obj: Event) -> str:
         return _("{time} ago").format(time=timesince_filter(obj.timestamp))
-
-    @admin.display(description="Type", ordering="type")
-    def type_display(self, obj: Event) -> str:
-        return obj.type_label
 
     def get_readonly_fields(
         self,
@@ -59,3 +53,39 @@ class EventAdmin(admin.ModelAdmin):
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Nobody can add events manually. Only programmatically."""
         return False
+
+    def render_change_form(
+        self,
+        request: HttpRequest,
+        context: Context,
+        obj: Event | None = None,
+        **kwargs: Any,
+    ) -> TemplateResponse:
+        """Get all events that are in the same Event group as this event."""
+        if obj:
+            qs = Event.objects.filter(group=obj.group).order_by("timestamp")
+            # Annotate the delay between events
+            last = None
+            for e in qs:
+                if last:
+                    delay = int((e.timestamp - last.timestamp).total_seconds())
+                    days, remainder = divmod(delay, 60 * 60 * 24)
+                    hours, remainder = divmod(remainder, 60 * 60)
+                    mins, secs = divmod(remainder, 60)
+                    times = {
+                        "days": days,
+                        "hours": hours,
+                        "min": mins,
+                        "sec": secs,
+                    }
+                    if days:
+                        e.timestamp_delay = _("{days}d {hours}h {min}m {sec}s").format(
+                            **times
+                        )
+                    elif hours:
+                        e.timestamp_delay = _("{hours}h {min}m {sec}s").format(**times)
+                    else:
+                        e.timestamp_delay = _("{min}m {sec}s").format(**times)
+                last = e
+            context["event_list"] = qs
+        return super().render_change_form(request, context, **kwargs)

@@ -11,6 +11,8 @@ from django.utils.html import linebreaks
 if TYPE_CHECKING:
     from django.db.models import Model
 
+    from eventlog.datastructures import EventTypeList
+
 
 def generate_group_id() -> str:
     return uuid4().hex
@@ -19,9 +21,9 @@ def generate_group_id() -> str:
 class EventGroup:
     """Enterprise Event Object Factory."""
 
-    event_model: type[Model] = NotImplemented
-    group_id: str = NotImplemented
-    event_types: dict = NotImplemented
+    event_model: type[Model] = ...
+    group_id: str = ...
+    event_types: EventTypeList = ...
     send_mail: str | None = None
 
     def __init__(
@@ -36,15 +38,15 @@ class EventGroup:
         self.send_mail = send_mail
 
     def __getattr__(self, attr: str) -> Callable:
-        if attr in self.event_types:
+        if self.event_types.by_name(attr):
 
             def f(*args: Any, **kwargs: Any) -> None:
                 return self._log_event(attr, *args, **kwargs)
 
             f.__name__ = attr
             return f
-        err = f'Event type "{attr}" does not exist'
-        raise AttributeError(err)
+        err = f'Event type "{attr}" does not exist.'
+        raise TypeError(err)
 
     def _log_event(  # noqa: PLR0913 Too many arguments
         self,
@@ -79,11 +81,9 @@ class EventGroup:
 
     def _send_mail(self, email: str, event_object: event_model) -> None:
         """Send a simple HTML email to the recipient defined in :email:."""
-        type_label = self.event_types.get(event_object.type, None)
-        if not type_label:
-            return event_object.type.capitalize()
+
         context = {
-            "type": type_label,
+            "type": self.event_types.by_name(event_object.type),
             "message": event_object.message,
             "data": event_object.data,
             "initiator": event_object.initiator,
@@ -101,4 +101,3 @@ class EventGroup:
             from_email=self.config.email_from,
             fail_silently=self.config.email_fail_silently,
         )
-        return None

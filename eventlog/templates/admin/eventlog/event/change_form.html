@@ -64,7 +64,7 @@
 
 {% block field_sets %}
   <ol class="eventTree">
-    {% for event in original.get_all_group_events %}
+    {% for event in event_list %}
       <li class="{% if original.pk == event.pk %}active{% endif %}">
         {% if forloop.first %}
           <span class="eventTimestamp">
@@ -82,7 +82,7 @@
             </a>
           </span>
         {% endif %}
-        <span class="eventLabel">{{ event.type_label }}</span>
+        <span class="eventLabel">{{ event.html_label }}</span>
         <span class="eventMessage">{{ event.message }}</span>
         {% if event.initiator %}
           <span class="eventInitator">{% blocktrans with initiator=event.initiator %}
