@@ -1,5 +1,7 @@
-eventlog/tests/testapp/testdb.sqlite
-docs/_build
+*.egg-info
+.coverage
 build/
 dist/
-*.egg-info
+docs/_build
+eventlog/tests/testapp/testdb.sqlite
+htmlcov

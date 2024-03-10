@@ -8,15 +8,14 @@ sphinx = "*"
 sphinx-rtd-theme = "*"
 sphinx-autobuild = "*"
 ruff = "*"
-black = "*"
 pytest = "*"
 wheel = "*"
 setuptools = "*"
 pytest-django = "*"
 
 [scripts]
-test = "pytest"
-cleanup = "sh -c \"ruff --fix eventlog && black eventlog"
+test = "pytest --cov"
+cleanup = "ruff check --fix eventlog && ruff format eventlog"
 docs = "sphinx-build docs docs/_build/html"
 
 [pipenv]

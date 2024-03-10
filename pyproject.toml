@@ -22,6 +22,9 @@ lint.ignore = [
   "FBT",      # Flake Boolean Trap (don't use arg=True in functions)
   "RUF012",   # Mutable class attributes should be annotated with `typing.ClassVar`
   "SLF001",   # Private member accessed: `_meta`
+
+  "COM812", # (ruff format) Checks for the absence of trailing commas
+  "ISC001", # (ruff format) Checks for implicitly concatenated strings on a single line
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
@@ -41,3 +44,14 @@ addopts = """
     --reuse-db
 """
 filterwarnings = ["ignore::RuntimeWarning"]
+
+
+[tool.coverage]
+run.omit = [
+  "eventlog/tests/*",
+  "eventlog/migrations/*",
+]
+report.exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
