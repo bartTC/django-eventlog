@@ -4,6 +4,9 @@
 .. image:: https://github.com/bartTC/django-eventlog/actions/workflows/push.yml/badge.svg
     :target: https://github.com/bartTC/django-eventlog/actions/workflows/push.yml
 
+.. image:: https://codecov.io/github/bartTC/django-eventlog/graph/badge.svg?token=YLXXbCawUQ
+    :target: https://codecov.io/github/bartTC/django-eventlog
+
 -----
 
 📖 **Full documentation: https://django-eventlog.readthedocs.io/**

@@ -1,9 +1,11 @@
+from datetime import timedelta
 from email.message import EmailMessage
 from http import HTTPStatus
 
 import pytest
 from django.test import Client
 from django.urls import reverse
+from django.utils import timezone
 from pytest_django.asserts import assertContains, assertNotContains
 
 from eventlog import EventGroup
@@ -110,7 +112,7 @@ def test_admin_changelist(admin_client: Client) -> None:
     """
 
     # Regular Event
-    e = EventGroup(group_id="legacy test")
+    e = EventGroup(group_id="abc")
     e.info("Hello World 1")
     e.info("Hello World 2")
     e.error("Hello World 3")
@@ -119,9 +121,8 @@ def test_admin_changelist(admin_client: Client) -> None:
     # Legacy Event (Created and in database, but its type no longer valid)
     Event.objects.create(
         type="legacy_event",
-        group="legacy test",
+        group="abc",
         message="This is some info.",
-        initiator="Test Runner",
     )
 
     changelist_url = reverse("admin:eventlog_event_changelist")
@@ -143,12 +144,13 @@ def test_admin_changeform(admin_client: Client) -> None:
     e1.info("Hello World 1")
     e1.info("Hello World 2")
 
-    # Legacy Event (Created and in database, but its type no longer valid)
+    # Legacy Event — created and in database, but its type no longer valid. Create a
+    # couple of them to test different 'day/hour/minute' delays between events.
     Event.objects.create(
         type="legacy_event",
         group=e1.group_id,
         message="This is some info.",
-        initiator="Test Runner",
+        timestamp=timezone.now() + timedelta(minutes=2),
     )
 
     # A second group, which is not rendered on the change form.
@@ -157,8 +159,8 @@ def test_admin_changeform(admin_client: Client) -> None:
     e2.warning("Hello World 4")
 
     obj = Event.objects.filter(group=e1.group_id).first()
-    changelist_url = reverse("admin:eventlog_event_change", args=(obj.pk,))
-    response = admin_client.get(changelist_url)
+    changeform_url = reverse("admin:eventlog_event_change", args=(obj.pk,))
+    response = admin_client.get(changeform_url)
 
     assert response.status_code == HTTPStatus.OK
     assertContains(response, "Hello World 1")
@@ -168,6 +170,37 @@ def test_admin_changeform(admin_client: Client) -> None:
     # These are a different group
     assertNotContains(response, "Hello World 3")
     assertNotContains(response, "Hello World 4")
+
+
+@pytest.mark.django_db()
+def test_admin_changeform_delays(admin_client: Client) -> None:
+    """
+    Create a list of events, all minutes/days/years apart,
+    to make sure; the various 'delay' timestamps don't break.
+    """
+    now = timezone.now()
+    e = EventGroup()
+    e1 = Event.objects.create(group=e.group_id, type="info", message="A")
+    e2 = Event.objects.create(group=e.group_id, type="info", message="B")
+    e3 = Event.objects.create(group=e.group_id, type="info", message="C")
+    e4 = Event.objects.create(group=e.group_id, type="info", message="D")
+    e5 = Event.objects.create(group=e.group_id, type="info", message="E")
+    e6 = Event.objects.create(group=e.group_id, type="info", message="F")
+
+    # Because "timestamp" is an auto_now field, we can't set it directly
+    # but have to do this detour.
+    Event.objects.filter(pk=e1.pk).update(timestamp=now)
+    Event.objects.filter(pk=e2.pk).update(timestamp=now + timedelta(seconds=1))
+    Event.objects.filter(pk=e3.pk).update(timestamp=now + timedelta(hours=1))
+    Event.objects.filter(pk=e4.pk).update(timestamp=now + timedelta(days=1))
+    Event.objects.filter(pk=e5.pk).update(timestamp=now + timedelta(weeks=1))
+    Event.objects.filter(pk=e6.pk).update(timestamp=now + timedelta(weeks=52))
+
+    obj = Event.objects.filter(group=e.group_id).first()
+    changeform_url = reverse("admin:eventlog_event_change", args=(obj.pk,))
+    response = admin_client.get(changeform_url)
+
+    assert response.status_code == HTTPStatus.OK
 
 
 @pytest.mark.django_db()

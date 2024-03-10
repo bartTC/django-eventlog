@@ -42,6 +42,7 @@ python_files = [
 addopts = """
     --ds=eventlog.tests.testapp.settings
     --reuse-db
+    --cov
 """
 filterwarnings = ["ignore::RuntimeWarning"]
 
