@@ -3,6 +3,7 @@
 ## 2.1 (WIP)
 
 - The format and value of the random group id can now be specified using the AppConfig.
+- Various improvements to make the Event model swappable via the AppConfig.
 
 ## 2.0 (2024-03-10)
 
