@@ -6,7 +6,7 @@
 
 -----
 
-📖 **Full documentation: https://django-eventlog.readthedocs.io/**
+📖 **Full documentation: https://barttc.github.io/django-eventlog/**
 
 *Compatibility Matrix:*
 
