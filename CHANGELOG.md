@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1 (WIP)
+
+- The format and value of the random group id can now be specified using the AppConfig.
+
 ## 2.0 (2024-03-10)
 
 - Overall test and code refactor.
@@ -21,7 +25,8 @@
           "color": None,
           "bgcolor": None,
       },
-      ...
+      # ...
+  }
   ```
 
   The dictionary is now a `EventTypeList` of `EventType` dataclasses:

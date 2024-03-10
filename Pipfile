@@ -12,6 +12,7 @@ ruff = "*"
 setuptools = "*"
 wheel = "*"
 mkdocs-include-markdown-plugin = "*"
+django-stubs = "*"
 
 [scripts]
 test = "pytest"

@@ -2,28 +2,24 @@ from __future__ import annotations
 
 import json
 from typing import TYPE_CHECKING, Any, Callable
-from uuid import uuid4
 
 from django.apps import apps
 from django.core.mail import send_mail as django_send_mail
 from django.utils.html import linebreaks
 
 if TYPE_CHECKING:
-    from django.db.models import Model
-
+    from .apps import EventLogConfig
     from .datastructures import EventTypeList
-
-
-def generate_group_id() -> str:
-    return uuid4().hex
+    from .models import Event
 
 
 class EventGroup:
     """Enterprise Event Object Factory."""
 
-    event_model: type[Model] = ...
-    group_id: str = ...
+    config: EventLogConfig = ...
+    event_model: Event = ...
     event_types: EventTypeList = ...
+    group_id: str = ...
     send_mail: str | None = None
 
     def __init__(
@@ -33,7 +29,7 @@ class EventGroup:
     ) -> None:
         self.event_model = apps.get_model("eventlog", "Event")
         self.config = apps.get_app_config("eventlog")
-        self.group_id = group_id or generate_group_id()
+        self.group_id = group_id or self.config.generate_group_id()
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 

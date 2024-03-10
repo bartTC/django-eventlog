@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from uuid import uuid4
+
 from django.apps import AppConfig
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -47,3 +49,9 @@ class EventLogConfig(AppConfig):
         programmatically create event types, if required.
         """
         return self.event_types
+
+    def generate_group_id(self) -> str:
+        """
+        Method to create a new, random group id.
+        """
+        return uuid4().hex

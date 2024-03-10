@@ -7,15 +7,12 @@ from django.contrib import admin
 from django.template.defaultfilters import timesince_filter
 from django.utils.translation import gettext_lazy as _
 
-from .models import Event
-
 if TYPE_CHECKING:
-    from django.http import HttpRequest
-    from django.template import Context
-    from django.template.response import TemplateResponse
+    from django.http import HttpRequest, HttpResponse
 
 
 config = apps.get_app_config("eventlog")
+Event = apps.get_model("eventlog", "Event")
 
 
 @admin.register(Event)
@@ -53,8 +50,12 @@ class EventAdmin(admin.ModelAdmin):
         return False
 
     def render_change_form(
-        self, request: HttpRequest, context: Context, obj: Event = None, **kwargs: Any
-    ) -> TemplateResponse:
+        self,
+        request: HttpRequest,
+        context: dict[str, Any],
+        obj: Event = None,
+        **kwargs: Any,
+    ) -> HttpResponse:
         """
         Annotate the delay between events.
         """

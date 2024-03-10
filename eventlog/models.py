@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from logging import getLogger
+from typing import TYPE_CHECKING
 
 from django.apps import apps
 from django.db import models
@@ -9,10 +10,14 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from .datastructures import EventType, EventTypeList
+from .datastructures import EventType
+
+if TYPE_CHECKING:
+    from .apps import EventLogConfig
+
 
 logger = getLogger(__name__)
-config = apps.get_app_config("eventlog")
+config: EventLogConfig = apps.get_app_config("eventlog")
 
 
 class Event(models.Model):
@@ -49,7 +54,7 @@ class Event(models.Model):
     @method_decorator(mark_safe)
     def html_label(self) -> str:
         type_name = str(self.type)
-        event_types: EventTypeList = config.get_event_types()
+        event_types = config.get_event_types()
 
         # Event type exists in DB, but no longer defined in AppConfig.event_types.
         if not (event_type := event_types.by_name(type_name)):
