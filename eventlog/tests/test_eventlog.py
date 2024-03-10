@@ -1,6 +1,6 @@
 from datetime import timedelta
-from email.message import EmailMessage
 from http import HTTPStatus
+from typing import Any
 
 import pytest
 from django.test import Client
@@ -75,7 +75,7 @@ def test_unserializable_data_log() -> None:
 
 
 @pytest.mark.django_db()
-def test_mail_per_event(mailoutbox: list[EmailMessage]) -> None:
+def test_mail_per_event(mailoutbox: Any) -> None:
     """Send one mail per event."""
     from eventlog import EventGroup
     from eventlog.models import Event
@@ -90,7 +90,7 @@ def test_mail_per_event(mailoutbox: list[EmailMessage]) -> None:
 
 
 @pytest.mark.django_db()
-def test_mail_per_group(mailoutbox: list[EmailMessage]) -> None:
+def test_mail_per_group(mailoutbox: Any) -> None:
     """Set mail per group so it's sent for every event."""
     from eventlog import EventGroup
     from eventlog.models import Event
