@@ -3,6 +3,8 @@ on:
     paths:
       - "docs/**"
       - ".github/workflows/docs.yml"
+      - "README.md"
+      - "CHANGELOG.md"
 
 name: build docs
 
