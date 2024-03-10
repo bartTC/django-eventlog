@@ -2,8 +2,6 @@
 [![](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml/badge.svg)](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml)
 [![](https://codecov.io/github/bartTC/django-eventlog/graph/badge.svg?token=YLXXbCawUQ)](https://codecov.io/github/bartTC/django-eventlog)
 
-<img src="https://github.com/bartTC/django-eventlog/raw/main/docs/_static/logo.webp" alt="djang-eventlog Logo" width="400"/>
-
 -----
 
 📖 **Full documentation: https://barttc.github.io/django-eventlog/**
@@ -19,6 +17,8 @@
 | 5.0       |  —  |  —  |  ✓   |  ✓   |  ✓   |
 
 # django-eventlog
+
+<img src="https://github.com/bartTC/django-eventlog/raw/main/docs/_static/logo.webp" alt="djang-eventlog Logo" width="300"/>
 
 django-eventlog is a very simple event logger you can use to track certain
 actions in your code. Events are stored in a Django model and can be viewed
