@@ -54,7 +54,7 @@ class EventGroup:
     ) -> None:
         """Log a new event entry."""
 
-        # Make sure, the data is JSON serizable, otherwise store it as a string.
+        # Make sure, the data is JSON serializable, otherwise store it as a string.
         if data:
             try:
                 json.dumps(data)

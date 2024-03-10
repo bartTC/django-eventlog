@@ -10,12 +10,14 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
+    from .models import Event
+
 
 config = apps.get_app_config("eventlog")
-Event = apps.get_model("eventlog", "Event")
+event_model: Event = apps.get_model("eventlog", "Event")
 
 
-@admin.register(Event)
+@admin.register(event_model)
 class EventAdmin(admin.ModelAdmin):
     """Event Admin."""
 
