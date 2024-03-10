@@ -1,0 +1,75 @@
+site_name: django-eventlog
+docs_dir: docs/
+site_dir: .docsbuild/
+repo_url: https://github.com/bartTC/django-eventlog
+edit_uri: edit/main/docs/
+use_directory_urls: false
+
+plugins:
+  - include-markdown
+
+extra:
+  generator: true
+
+theme:
+  palette:
+    primary: indigo
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - search.highlight
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - def_list
+  - footnotes
+  - pymdownx.details
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/sorts/tablesort.number.min.js
+
+#nav:
+#  - Home: index.md
+#
+#  - AWS:
+#      - aws/setup.md
+#
+#      - Tasks:
+#          - aws/tasks/deploy.md
+#          - aws/tasks/logfiles.md
+#          - aws/tasks/environment_variables.md
+#          - aws/tasks/management_commands.md
+#
+#      - Create a new Server:
+#          - aws/new_server/create_instance.md
+#          - aws/new_server/production_setup.md
+#
+#  - Local Development:
+#      - local_development/setup.md
+#      - local_development/env_variables.md
+#      - local_development/import_database.md
+#      - local_development/import_media_files.md
+#      - local_development/staticfiles.md
+#
+#  - Troubleshooting:
+#      - troubleshooting/troubleshooting.md
+#      - troubleshooting/page_migration.md
+#      - troubleshooting/scheduled_tasks.md
+#      - (Legacy Docs): troubleshooting/legacy_docs.md
+#
+#  - Styleguide: ./styleguide/index.html

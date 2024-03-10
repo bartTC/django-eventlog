@@ -4,17 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-sphinx = "*"
-sphinx-rtd-theme = "*"
-sphinx-autobuild = "*"
-ruff = "*"
+mkdocs-material = "*"
 pytest = "*"
-wheel = "*"
-setuptools = "*"
+pytest-cov = "*"
 pytest-django = "*"
+ruff = "*"
+setuptools = "*"
+wheel = "*"
+mkdocs-include-markdown-plugin = "*"
 
 [scripts]
-test = "pytest --cov"
+test = "pytest"
 cleanup = "ruff check --fix eventlog && ruff format eventlog"
 docs = "sphinx-build docs docs/_build/html"
 
