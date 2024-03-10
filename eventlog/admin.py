@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.template.defaultfilters import timesince_filter
 from django.utils.translation import gettext_lazy as _
 
-from eventlog.models import Event
+from .models import Event
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -42,50 +42,41 @@ class EventAdmin(admin.ModelAdmin):
     def relative_timestamp(self, obj: Event) -> str:
         return _("{time} ago").format(time=timesince_filter(obj.timestamp))
 
-    def get_readonly_fields(
-        self,
-        request: HttpRequest,
-        obj: Event | None = None,
-    ) -> list[str]:
-        """All fields are readonly. It's pure logging."""
-        return [i.name for i in obj._meta.get_fields()] if obj else []
-
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Nobody can add events manually. Only programmatically."""
         return False
 
+    def has_change_permission(
+        self, request: HttpRequest, obj: Event | None = None
+    ) -> bool:
+        """Nobody can change event data."""
+        return False
+
     def render_change_form(
-        self,
-        request: HttpRequest,
-        context: Context,
-        obj: Event | None = None,
-        **kwargs: Any,
+        self, request: HttpRequest, context: Context, obj: Event = None, **kwargs: Any
     ) -> TemplateResponse:
-        """Get all events that are in the same Event group as this event."""
-        if obj:
-            qs = Event.objects.filter(group=obj.group).order_by("timestamp")
-            # Annotate the delay between events
-            last = None
-            for e in qs:
-                if last:
-                    delay = int((e.timestamp - last.timestamp).total_seconds())
-                    days, remainder = divmod(delay, 60 * 60 * 24)
-                    hours, remainder = divmod(remainder, 60 * 60)
-                    mins, secs = divmod(remainder, 60)
-                    times = {
-                        "days": days,
-                        "hours": hours,
-                        "min": mins,
-                        "sec": secs,
-                    }
-                    if days:
-                        e.timestamp_delay = _("{days}d {hours}h {min}m {sec}s").format(
-                            **times
-                        )
-                    elif hours:
-                        e.timestamp_delay = _("{hours}h {min}m {sec}s").format(**times)
-                    else:
-                        e.timestamp_delay = _("{min}m {sec}s").format(**times)
-                last = e
-            context["event_list"] = qs
+        """
+        Annotate the delay between events.
+        """
+
+        qs = Event.objects.filter(group=obj.group).order_by("timestamp")
+
+        last = None
+        for e in qs:
+            if last:
+                delay = int((e.timestamp - last.timestamp).total_seconds())
+                days, remainder = divmod(delay, 60 * 60 * 24)
+                hours, remainder = divmod(remainder, 60 * 60)
+                mins, secs = divmod(remainder, 60)
+                times = {"days": days, "hours": hours, "min": mins, "sec": secs}
+                if days:
+                    e.timestamp_delay = _("{days}d {hours}h {min}m {sec}s").format(
+                        **times
+                    )
+                elif hours:
+                    e.timestamp_delay = _("{hours}h {min}m {sec}s").format(**times)
+                else:
+                    e.timestamp_delay = _("{min}m {sec}s").format(**times)
+            last = e
+        context["event_list"] = qs
         return super().render_change_form(request, context, **kwargs)

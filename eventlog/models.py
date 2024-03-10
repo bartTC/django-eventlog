@@ -53,9 +53,6 @@ class Event(models.Model):
 
         # Event type exists in DB, but no longer defined in AppConfig.event_types.
         if not (event_type := event_types.by_name(type_name)):
-            event_type = EventType(
-                name=type_name,
-                label=type_name.title(),
-            )
+            event_type = EventType(name=type_name, label=type_name.title())
 
         return event_type.html_label

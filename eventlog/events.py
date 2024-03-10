@@ -11,7 +11,7 @@ from django.utils.html import linebreaks
 if TYPE_CHECKING:
     from django.db.models import Model
 
-    from eventlog.datastructures import EventTypeList
+    from .datastructures import EventTypeList
 
 
 def generate_group_id() -> str:

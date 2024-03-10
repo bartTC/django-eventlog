@@ -12,7 +12,7 @@ class EventLogConfig(AppConfig):
     verbose_name = "EventLog"
     default_auto_field = "django.db.models.AutoField"
 
-    # List of event types to be used in events. A list of `EventType` classes
+    # -- List of event types to be used in events.
     event_types: EventTypeList = EventTypeList(
         EventType(name="info", label=_("Info")),
         EventType(name="warning", label=_("Warning")),

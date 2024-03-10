@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.utils import timezone
 from pytest_django.asserts import assertContains, assertNotContains
 
-from eventlog import EventGroup
 from eventlog.datastructures import EventType
+from eventlog.events import EventGroup
 from eventlog.models import Event
 
 
