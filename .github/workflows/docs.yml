@@ -1,0 +1,50 @@
+on:
+  push:
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs.yml"
+
+name: build docs
+
+jobs:
+  build:
+    name: Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+           python-version: '3.12.1'
+           cache: 'pip'
+
+      - name: Build MKDocs
+        run: |
+          pip install --disable-pip-version-check mkdocs-material mkdocs-include-markdown-plugin
+          mkdocs build --clean
+
+      - name: Store Github Pages Artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .docsbuild
+          retention-days: 3
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
