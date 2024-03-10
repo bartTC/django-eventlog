@@ -2,9 +2,7 @@
 [![](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml/badge.svg)](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml)
 [![](https://codecov.io/github/bartTC/django-eventlog/graph/badge.svg?token=YLXXbCawUQ)](https://codecov.io/github/bartTC/django-eventlog)
 
-<div style="max-width:20rem">
-    <img src="https://github.com/bartTC/django-eventlog/raw/main/docs/_static/logo.webp" alt="djang-eventlog Logo"/>
-</div>
+<img src="https://github.com/bartTC/django-eventlog/raw/main/docs/_static/logo.webp" alt="djang-eventlog Logo" width="400"/>
 
 -----
 
