@@ -2,8 +2,48 @@
 Changelog
 =========
 
-1.5 (wip)
-=========
+2.0 (WIP)
+==================
+
+- Overall test and code refactor.
+- Timeline in Admin change form now supports delays of days and hours, instead of just minutes.
+- *Backwards incompatible:* Removed undocumented ``Event.objects.purge()`` queryset method.
+- *Backwards incompatible:* The list of event types defined in the app config is now
+  set via Python dataclasses rather than a dictionary. The migration is simple.
+
+  .. code-block:: python
+
+    event_types = {
+        "info": {
+            "label": _("Info"),
+            "color": None,
+            "bgcolor": None,
+        },
+        "warning": {
+            "label": _("Warning"),
+            "color": None,
+            "bgcolor": None,
+        },
+        ...
+
+  The dictionary is now a ``EventTypeList`` of ``EventType`` dataclasses:
+
+  .. code-block:: python
+
+	from eventlog.datastructures import EventType, EventTypeList
+
+    # List of event types to be used in events. A list of `EventType` classes
+    event_types = EventTypeList(
+        EventType(name="info", label=_("Info")),
+        EventType(name="warning", label=_("Warning")),
+        EventType(name="error", label=_("Error"), color="red"),
+        EventType(name="critical", label=_("Critical"), color="white", bgcolor="red"),
+    )
+
+  You will only need to do this change, if you've earlier overridden the event_type property.
+
+1.5 (2024-03-08)
+================
 
 - Event can have optional, JSON serializable data attached.
 - Fixed dark mode colors.
