@@ -1,6 +1,6 @@
 # Changelog
 
-# 2.0 (2024-03-10)
+##Cha 2.0 (2024-03-10)
 
 - Overall test and code refactor.
 - Documentation now done with MKDocs.
