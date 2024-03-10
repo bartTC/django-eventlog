@@ -22,8 +22,8 @@ $ tox -r
 ```
 
 
-You can also invoke the test suite or other 'manage.py' commands by calling
-the ``django-admin`` tool with the test app settings:
+You can also invoke the test suite or other 'manage.py' commands by calling the 
+`django-admin` tool with the test app settings:
 
 ```bash
 $ pipenv run django-admin

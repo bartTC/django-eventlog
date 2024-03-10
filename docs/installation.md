@@ -8,8 +8,8 @@ Install django-eventlog via pip:
 $ pip install django-eventlog
 ```
 
-Then add ``eventlog.apps.EventLogConfig`` to your ``INSTALLED_APPS``
-setting and migrate the database as usual.
+Then add `eventlog.apps.EventLogConfig` to your `INSTALLED_APPS` setting and migrate 
+the database as usual.
 
 ```python
 INSTALLED_APPS = [
@@ -20,8 +20,8 @@ INSTALLED_APPS = [
 
 ## Usage
 
-A new Event group is started by the ``EventGroup`` object, which you can call
-with individual "types" similar to logging levels in Python logging.
+A new Event group is started by the `EventGroup` object, which you can call with 
+individual "types" similar to logging levels in Python logging.
 
 ```python
 from eventlog import EventGroup
@@ -44,16 +44,16 @@ except RuntimeError:
 e.info('All emails sent!', initiator='Mail Sender')
 ```
 
-This example will store two ``info`` events. Each event will show up in the
-Django Admin changelog view. If you hover over one, it will highlight all
-related events as well.
+This example will store two ``info`` events. Each event will show up in the Django 
+Admin changelog view. If you hover over one, it will highlight all related events as 
+well.
 
 ![](https://github.com/bartTC/django-eventlog/raw/main/docs/_static/change_form.png)
 
 Event types are pre-defined in django-eventlog, but you can define your own
-(see [Custom Event Types](settings.md)). You can use them to distinct your events and also filter them in
-the admin view later. For example to only see `error` events.
-Currently these event types are defined:
+(see [Custom Event Types](settings.md)). You can use them to distinct your events and also 
+filter them in the admin view later. For example, to only see `error` events. 
+Currently, these event types are defined:
 
 - `info`
 - `warning`

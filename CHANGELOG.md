@@ -1,13 +1,13 @@
 # Changelog
 
-##Cha 2.0 (2024-03-10)
+## 2.0 (2024-03-10)
 
 - Overall test and code refactor.
 - Documentation now done with MKDocs.
 - Timeline in Admin change form now supports delays of days and hours, instead of just minutes.
-- *Backwards incompatible:* Removed undocumented ``Event.objects.purge()`` queryset method.
+- *Backwards incompatible:* Removed undocumented `Event.objects.purge()` queryset method.
 - *Backwards incompatible:* The list of event types defined in the app config is now
-  set via Python dataclasses rather than a dictionary. The migration is simple.
+  set via Python dataclasses rather than a dictionary. The migration is straightforward.
 
   ```python
   event_types = {
@@ -24,9 +24,10 @@
       ...
   ```
 
-  The dictionary is now a ``EventTypeList`` of ``EventType`` dataclasses:
+  The dictionary is now a `EventTypeList` of `EventType` dataclasses:
 
   ```python
+  from django.utils.translation import gettext_lazy as _
   from eventlog.datastructures import EventType, EventTypeList
   
   # List of event types to be used in events. A list of `EventType` classes

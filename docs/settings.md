@@ -1,13 +1,13 @@
 # Settings and Configuration
 
-All configuration is done by customizing the [AppConfig]. This is a feature
-introduced in Django 1.9 and allows you to set settings more programmatically.
+All configuration is done by customizing the [AppConfig]. This is a feature introduced 
+in Django 1.9 and allows you to set settings more programmatically.
 
 Custom Event Types
 ------------------
 
-By default, django-eventlog comes with some default types, but you can override
-them in a custom Django AppConfig object:
+By default, django-eventlog comes with some default types, but you can override them in 
+a custom Django AppConfig object:
 
 ```python
 # myproject/apps.py
@@ -26,7 +26,7 @@ class CustomEventLogConfig(EventLogConfig):
 
 # settings.py
 INSTALLED_APPS = [
-    # Use your custom Config instead of ``eventlog.apps.EventLogConfig``
+    # Use your custom Config instead of `eventlog.apps.EventLogConfig`
     'myproject.CustomEventLogConfig',
 ]
 
