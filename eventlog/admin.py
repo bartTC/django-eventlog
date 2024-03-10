@@ -38,7 +38,7 @@ class EventAdmin(admin.ModelAdmin):
         self.event_types = config.get_event_types()
 
     @admin.display(description="Time", ordering="timestamp")
-    def relative_timestamp(self, obj: Event) -> str:
+    def relative_timestamp(self, obj: event_model) -> str:
         return _("{time} ago").format(time=timesince_filter(obj.timestamp))
 
     def has_add_permission(self, request: HttpRequest) -> bool:
@@ -46,7 +46,7 @@ class EventAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(
-        self, request: HttpRequest, obj: Event | None = None
+        self, request: HttpRequest, obj: event_model | None = None
     ) -> bool:
         """Nobody can change event data."""
         return False
@@ -62,7 +62,7 @@ class EventAdmin(admin.ModelAdmin):
         Annotate the delay between events.
         """
 
-        qs = Event.objects.filter(group=obj.group).order_by("timestamp")
+        qs = event_model.objects.filter(group=obj.group).order_by("timestamp")
 
         last = None
         for e in qs:
