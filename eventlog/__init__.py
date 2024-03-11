@@ -1,1 +1,3 @@
-from .events import EventGroup  # noqa: F401 unused import
+from .events import EventGroup
+
+__all__ = ["EventGroup"]
