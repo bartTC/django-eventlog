@@ -1,8 +1,8 @@
-*.egg-info
 .coverage
 .docsbuild
+.tool-versions
+*.egg-info
 build/
 dist/
-docs/_build
 eventlog/tests/testapp/testdb.sqlite
 htmlcov
