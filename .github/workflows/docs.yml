@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-           python-version: '3.12.1'
+           python-version: '3.12'
            cache: 'pip'
 
       - name: Build MKDocs
@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .docsbuild
-          retention-days: 3
+          retention-days: 1
 
   deploy:
     if: github.ref == 'refs/heads/main'
