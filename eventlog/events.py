@@ -33,8 +33,10 @@ class EventGroup:
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 
-        if len(self.group_id) > 40:
-            raise TypeError("group_id must be at most 40 characters")
+        max_length = self.event_model._meta.get_field("group").max_length
+        if len(self.group_id) > max_length:
+            msg = f"group_id must be at most {max_length} characters"
+            raise TypeError(msg)
 
     def __getattr__(self, attr: str) -> Callable:
         if self.event_types.by_name(attr):
