@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-eventlog"
-version = "2.1a0"
+version = "2.1a1"
 packages = [{include = "eventlog"}]
 description = "django-eventlog stores event messages in a Django model."
 authors = ["Martin Mahner <martin@mahner.org>"]
@@ -29,8 +29,8 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-source = "https://github.com/bartTC/django-eventlog"
-bugtrack = "https://github.com/bartTC/django-eventlog/issues"
+Source = "https://github.com/bartTC/django-eventlog"
+Bugtracker = "https://github.com/bartTC/django-eventlog/issues"
 
 [tool.poetry.dependencies]
 python = "^3.8"
