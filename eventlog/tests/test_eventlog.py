@@ -224,10 +224,10 @@ def test_invalid_type_creation() -> None:
 
 def test_group_name_too_long() -> None:
     """Group id' are limited to 40 characters."""
-    e = EventGroup(group_id="a" * 40)
+    EventGroup(group_id="a" * 40)
 
     with pytest.raises(TypeError):
-        e = EventGroup(group_id="a" * 41)
+        EventGroup(group_id="a" * 41)
 
 
 def test_type_name_too_long() -> None:
