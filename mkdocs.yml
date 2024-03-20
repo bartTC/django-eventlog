@@ -18,11 +18,9 @@ theme:
   name: material
   features:
     - navigation.instant
-    - navigation.tabs
     - navigation.sections
     - navigation.indexes
-    - search.highlight
-    - search.suggest
+    - navigation.footer
 
 markdown_extensions:
   - admonition
@@ -45,8 +43,8 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/sorts/tablesort.number.min.js
 
 nav:
-  - Home: index.md
+  - Start: index.md
   - Changelog: changelog.md
   - Installation & Usage: installation.md
   - Settings: settings.md
-  - Testing: testing.md
+  - Testing and Local Development: testing.md

@@ -62,7 +62,7 @@ Currently, these event types are defined:
 
 ### Re-use event groups
 
-You can re-use the same event group through the code, if you pass a fixed group name:
+You can re-use the same event group through the code, if you pass a known group name:
 
 ```python
 from eventlog import EventGroup
