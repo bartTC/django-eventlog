@@ -203,12 +203,10 @@ def test_admin_changeform_delays(admin_client: Client) -> None:
     assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.django_db()
 def test_invalid_type_usage() -> None:
     """Calling an invalid type will raise an error."""
-    from eventlog import EventGroup
-
     e = EventGroup()
+
     with pytest.raises(TypeError):
         e.doesnotexist("Hello World")
 
@@ -223,7 +221,7 @@ def test_invalid_type_creation() -> None:
 
 
 def test_group_name_too_long() -> None:
-    """Group id' are limited to 40 characters."""
+    """Group ids are limited to 40 characters."""
     EventGroup(group_id="a" * 40)
 
     with pytest.raises(TypeError):
