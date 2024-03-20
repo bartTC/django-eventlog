@@ -221,8 +221,18 @@ def test_invalid_type_creation() -> None:
             label="Must not start with number",
         )
 
+
+def test_group_name_too_long() -> None:
+    """Group id' are limited to 40 characters."""
+    e = EventGroup(group_id="a" * 40)
+
     with pytest.raises(TypeError):
-        EventType(
-            name="a" * 51,
-            label="Must not exceed 50 characters",
-        )
+        e = EventGroup(group_id="a" * 41)
+
+
+def test_type_name_too_long() -> None:
+    """Type names (.info, .warning) are limited to 50 characters."""
+    EventType(name="a" * 50, label="50 chars is OK")
+
+    with pytest.raises(TypeError):
+        EventType(name="a" * 51, label="Must not exceed 50 characters")
