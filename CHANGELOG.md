@@ -4,6 +4,7 @@
 
 - The format and value of the random group id can now be specified using the AppConfig.
 - Various improvements to make the Event model swappable via the AppConfig.
+- Switch development tooling from Pipenv to Poetry
 
 ## 2.0 (2024-03-10)
 

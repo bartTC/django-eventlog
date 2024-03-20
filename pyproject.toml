@@ -1,11 +1,52 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta:__legacy__"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-target-version = ['py311']
-include = '\.pyi?$'
-exclude = "migrations"
+[tool.poetry]
+name = "django-eventlog"
+version = "2.1a0"
+packages = [{include = "eventlog"}]
+description = "django-eventlog stores event messages in a Django model."
+authors = ["Martin Mahner <martin@mahner.org>"]
+license = "MIT"
+readme = ["README.md", "CHANGELOG.md"]
+homepage = "https://barttc.github.io/django-eventlog/"
+documentation = "https://barttc.github.io/django-eventlog/"
+keywords = ["django", "logging", "logger", "events"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Django",
+]
+
+[tool.poetry.urls]
+source = "https://github.com/bartTC/django-eventlog"
+bugtrack = "https://github.com/bartTC/django-eventlog/issues"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django = ">=3.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+pytest-cov = "^4.1.0"
+pytest-django = "^4.8.0"
+ruff = "^0.3.3"
+django-stubs = "^4.2.7"
+mkdocs-material = "^9.5.14"
+mkdocs-include-markdown-plugin = "^6.0.4"
+
+[tool.poetry.scripts]
+tests = "pytest:main"
 
 [tool.ruff]
 target-version = "py38"
@@ -45,7 +86,6 @@ addopts = """
     --cov
 """
 filterwarnings = ["ignore::RuntimeWarning"]
-
 
 [tool.coverage]
 run.omit = [
