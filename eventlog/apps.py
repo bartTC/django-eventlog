@@ -28,7 +28,7 @@ class EventLogConfig(AppConfig):
     email_fail_silently: bool = False
 
     # From email address used when sending notifications
-    email_from: settings | None = settings.DEFAULT_FROM_EMAIL
+    email_from: str | None = settings.DEFAULT_FROM_EMAIL
 
     # Email subject and text body templates. This needs to be a standard
     # Python string. You may use 'new style' format variables here.

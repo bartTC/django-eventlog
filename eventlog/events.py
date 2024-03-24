@@ -80,7 +80,7 @@ class EventGroup:
         if mail:
             self._send_mail(mail, event_object)
 
-    def _send_mail(self, email: str, event_object: event_model) -> None:
+    def _send_mail(self, email: str, event_object: Event) -> None:
         """Send a simple HTML email to the recipient defined in :email:."""
 
         context = {
