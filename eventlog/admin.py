@@ -10,10 +10,11 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
+    from .apps import EventLogConfig
     from .models import Event
 
 
-config = apps.get_app_config("eventlog")
+config: EventLogConfig = apps.get_app_config("eventlog")
 event_model: Event = apps.get_model("eventlog", "Event")
 
 
@@ -60,7 +61,7 @@ class EventAdmin(admin.ModelAdmin):
         self.event_types = config.get_event_types()
 
     @admin.display(description="Time", ordering="timestamp")
-    def relative_timestamp(self, obj: event_model) -> str:
+    def relative_timestamp(self, obj: Event) -> str:
         return _("{time} ago").format(time=timesince_filter(obj.timestamp))
 
     def has_add_permission(self, request: HttpRequest) -> bool:
@@ -68,7 +69,7 @@ class EventAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(
-        self, request: HttpRequest, obj: event_model | None = None
+        self, request: HttpRequest, obj: Event | None = None
     ) -> bool:
         """Nobody can change event data."""
         return False
@@ -83,6 +84,8 @@ class EventAdmin(admin.ModelAdmin):
         """
         Annotate the delay between events.
         """
+        if not obj:  # pragma: no cover
+            return super().render_change_form(request, context, obj=obj, **kwargs)
 
         qs = event_model.objects.filter(group=obj.group).order_by("timestamp")
 

@@ -16,10 +16,10 @@ if TYPE_CHECKING:
 class EventGroup:
     """Enterprise Event Object Factory."""
 
-    config: EventLogConfig = ...
-    event_model: Event = ...
-    event_types: EventTypeList = ...
-    group_id: str = ...
+    config: EventLogConfig
+    event_model: Event
+    event_types: EventTypeList
+    group_id: str
     send_mail: str | None = None
 
     def __init__(

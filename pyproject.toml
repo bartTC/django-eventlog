@@ -96,3 +96,17 @@ report.exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
 ]
+
+[tool.mypy]
+check_untyped_defs = true
+ignore_errors = false
+ignore_missing_imports = true
+strict_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+exclude = ".*/migrations/.*"
+
+[tool.django-stubs]
+django_settings_module = "eventlog.tests.testapp.settings"
+
