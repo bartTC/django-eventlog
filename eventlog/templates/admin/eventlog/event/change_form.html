@@ -75,10 +75,7 @@
         {% else %}
           <span class="eventTimestamp">
             <a href="{% url "admin:eventlog_event_change" event.pk %}">
-              <abbr title="{{ event.timestamp|date:"DATETIME_FORMAT" }}">
-              {% blocktrans with delay=event.timestamp_delay %}{{ delay }}
-                later{% endblocktrans %}
-              </abbr>
+              <abbr title="{{ event.timestamp|date:"DATETIME_FORMAT" }}">{{ event.timestamp_delay }}</abbr>
             </a>
           </span>
         {% endif %}

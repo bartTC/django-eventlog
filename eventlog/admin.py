@@ -17,6 +17,28 @@ config = apps.get_app_config("eventlog")
 event_model: Event = apps.get_model("eventlog", "Event")
 
 
+def get_difference(obj: Event, next_obj: Event) -> str:
+    """
+    Calculates the elapsed time between two Event objects.
+    Returns a string in the format:
+
+    "1d 4h 7m 0s"
+    "4h 7m 0s"
+    "5s"
+    """
+    delay = int((next_obj.timestamp - obj.timestamp).total_seconds())
+    years, remainder = divmod(delay, 60 * 60 * 24 * 365)
+    days, remainder = divmod(remainder, 60 * 60 * 24)
+    hours, remainder = divmod(remainder, 60 * 60)
+    mins, secs = divmod(remainder, 60)
+    times = {"y": years, "d": days, "h": hours, "m": mins, "s": secs}
+    if sum(times.values()) == 0:
+        return _("- same time")
+
+    duration = " ".join((f"{value}{key}" for key, value in times.items() if value > 0))
+    return _("{duration} later").format(duration=duration)
+
+
 @admin.register(event_model)
 class EventAdmin(admin.ModelAdmin):
     """Event Admin."""
@@ -67,19 +89,7 @@ class EventAdmin(admin.ModelAdmin):
         last = None
         for e in qs:
             if last:
-                delay = int((e.timestamp - last.timestamp).total_seconds())
-                days, remainder = divmod(delay, 60 * 60 * 24)
-                hours, remainder = divmod(remainder, 60 * 60)
-                mins, secs = divmod(remainder, 60)
-                times = {"days": days, "hours": hours, "min": mins, "sec": secs}
-                if days:
-                    e.timestamp_delay = _("{days}d {hours}h {min}m {sec}s").format(
-                        **times
-                    )
-                elif hours:
-                    e.timestamp_delay = _("{hours}h {min}m {sec}s").format(**times)
-                else:
-                    e.timestamp_delay = _("{min}m {sec}s").format(**times)
+                e.timestamp_delay = get_difference(last, obj)
             last = e
         context["event_list"] = qs
         return super().render_change_form(request, context, **kwargs)

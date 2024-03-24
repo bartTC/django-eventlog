@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from pytest_django.asserts import assertContains, assertNotContains
 
+from eventlog.admin import get_difference
 from eventlog.datastructures import EventType
 from eventlog.events import EventGroup
 from eventlog.models import Event
@@ -234,3 +235,39 @@ def test_type_name_too_long() -> None:
 
     with pytest.raises(TypeError):
         EventType(name="a" * 51, label="Must not exceed 50 characters")
+
+
+def test_duration() -> None:
+    """Test duration string calcuated for the time between two Events."""
+    now = timezone.now()
+
+    diff = get_difference(Event(timestamp=now), Event(timestamp=now))
+    assert diff == "- same time"
+
+    diff = get_difference(
+        Event(timestamp=now), Event(timestamp=now + timedelta(seconds=10))
+    )
+    assert diff == "10s later"
+
+    diff = get_difference(
+        Event(timestamp=now), Event(timestamp=now + timedelta(seconds=10, minutes=5))
+    )
+    assert diff == "5m 10s later"
+
+    diff = get_difference(
+        Event(timestamp=now),
+        Event(timestamp=now + timedelta(seconds=10, minutes=5, hours=2)),
+    )
+    assert diff == "2h 5m 10s later"
+
+    diff = get_difference(
+        Event(timestamp=now),
+        Event(timestamp=now + timedelta(seconds=10, minutes=5, hours=2, days=3)),
+    )
+    assert diff == "3d 2h 5m 10s later"
+
+    diff = get_difference(
+        Event(timestamp=now),
+        Event(timestamp=now + timedelta(seconds=10, minutes=5, hours=2, days=400)),
+    )
+    assert diff == "1y 35d 2h 5m 10s later"
