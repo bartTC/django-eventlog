@@ -61,4 +61,6 @@ class EventTypeList:
         Get an event type from the list by its name.
         Returns None if the event does not exist.
         """
-        return next(filter(lambda e: e.name == name, self.events), None)
+        return next(
+            filter(lambda e: e is not None and e.name == name, self.events), None
+        )
