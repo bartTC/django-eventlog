@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2 (2024-06-16)
+
+- Minor typo fixes
+- The 'group' db field now uses a DB index.
+
 ## 2.1 (2024-03-20)
 
 - The format and value of the random group id can now be specified using the AppConfig.
@@ -11,8 +16,8 @@
 - Overall test and code refactor.
 - Documentation now done with MKDocs.
 - Timeline in Admin change form now supports delays of days and hours, instead of just minutes.
-- *Backwards incompatible:* Removed undocumented `Event.objects.purge()` queryset method.
-- *Backwards incompatible:* The list of event types defined in the app config is now
+- _Backwards incompatible:_ Removed undocumented `Event.objects.purge()` queryset method.
+- _Backwards incompatible:_ The list of event types defined in the app config is now
   set via Python dataclasses rather than a dictionary. The migration is straightforward.
 
   ```python
@@ -36,7 +41,7 @@
   ```python
   from django.utils.translation import gettext_lazy as _
   from eventlog.datastructures import EventType, EventTypeList
-  
+
   # List of event types to be used in events. A list of `EventType` classes
   event_types = EventTypeList(
       EventType(name="info", label=_("Info")),
@@ -45,7 +50,7 @@
       EventType(name="critical", label=_("Critical"), color="white", bgcolor="red"),
   )
   ```
-  
+
   You will only need to do this change if you've earlier overridden the event_type property.
 
 ## 1.5 (2024-03-08)
@@ -87,4 +92,3 @@
 - Initial release.
 - Django 1.8 to 2.0 compatibility.
 - Python 2.7 to 3.6 compatibility.
-

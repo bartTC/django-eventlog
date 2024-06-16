@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-eventlog"
-version = "2.1"
+version = "2.2"
 packages = [{include = "eventlog"}]
 description = "django-eventlog stores event messages in a Django model."
 authors = ["Martin Mahner <martin@mahner.org>"]
