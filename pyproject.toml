@@ -37,13 +37,13 @@ python = "^3.8"
 django = ">=3.2"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.1.1"
-pytest-cov = "^4.1.0"
-pytest-django = "^4.8.0"
-ruff = "^0.3.3"
-django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
-mkdocs-material = "^9.5.14"
-mkdocs-include-markdown-plugin = "^6.0.4"
+pytest = "*"
+pytest-cov = "*"
+pytest-django = "*"
+ruff = "*"
+django-stubs = {extras = ["compatible-mypy"], version = "*"}
+mkdocs-material = "*"
+mkdocs-include-markdown-plugin = "*"
 
 [tool.poetry.scripts]
 tests = "pytest:main"
