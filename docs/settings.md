@@ -17,7 +17,7 @@ from eventlog.apps import EventLogConfig
 from eventlog.datastructures import EventType, EventTypeList
 
 class CustomEventLogConfig(EventLogConfig):
-    event_types: EventTypeList = EventTypeList(
+    event_types = EventTypeList(
         EventType(name="info", label=_("Info")),
         EventType(name="oh_crap", label=_("Oh Crap!"), color="red"),
         EventType(name="mail_system", label=_("Mail System"), color="blue"),
@@ -40,7 +40,7 @@ e.oh_crap('Some bad happened')
 e.mail_system('Mail sent successfully!')
 ```
 
-There are much more settings to override, take a look at the [EventLogConfig].
+There are more settings to override, take a look at the [EventLogConfig].
 
 [AppConfig]: https://docs.djangoproject.com/en/1.9/ref/applications/
 [EventLogConfig]: https://github.com/bartTC/django-eventlog/blob/master/eventlog/apps.py

@@ -18,7 +18,7 @@ class EventType:
     # underscores, but must not start with either a number or underscore.
     # The max length is 50 characters.
     #
-    # This is OK: yolo, Hello_World, jerry123. This not: 1pineappleplease
+    # This is OK: yolo, Hello_World, jerry123. This is not: 1pineappleplease
     name: str
     label: str  # Human readable label
     color: str | None = None  # Foreground CSS color used in the Admin changelist.
