@@ -24,7 +24,7 @@ class Event(models.Model):
     """Event log model."""
 
     type = models.CharField(_("Event Type"), max_length=50)
-    group = models.CharField(_("Event Group"), max_length=40)
+    group = models.CharField(_("Event Group"), max_length=40, db_index=True)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now_add=True)
     message = models.TextField(_("Message"))
     data = models.JSONField(_("Data"), blank=True, null=True)
