@@ -2,6 +2,7 @@
 .docsbuild
 .tool-versions
 *.egg-info
+poetry.lock
 build/
 dist/
 eventlog/tests/testapp/testdb.sqlite
