@@ -55,14 +55,13 @@ lint.select = ["ALL"]
 lint.ignore = [
   "ANN101",   # Missing type annotation for `self`
   "ANN401",   # typing.Any is disallowed as function arg type
-  "ARG001",   # Unused function argument
-  "ARG002",   # Unused method argument
+  "ARG001",   # Unused function argument (request, ...)
+  "ARG002",   # Unused method argument (*args, **kwargs)
   "D",        # Missing or badly formatted docstrings
   "E501",     # Line too long (>88)
   "ERA001",   # Found commented-out code
   "FBT",      # Flake Boolean Trap (don't use arg=True in functions)
   "RUF012",   # Mutable class attributes should be annotated with `typing.ClassVar`
-  "SLF001",   # Private member accessed: `_meta`
 
   "COM812", # (ruff format) Checks for the absence of trailing commas
   "ISC001", # (ruff format) Checks for implicitly concatenated strings on a single line
@@ -112,36 +111,36 @@ django_settings_module = "eventlog.tests.testapp.settings"
 
 [tool.tox]
 legacy_tox_ini = """
-  [tox]
-  toxworkdir=/tmp/tox/django-eventlog
-  skip_missing_interpreters=True
-  envlist=
-      py{38,39,310,311,312}-django-{32,40,41,42}
-      py{310,311,312}-django-{50}
+[tox]
+toxworkdir=/tmp/tox/django-eventlog
+skip_missing_interpreters=True
+envlist=
+  py{38,39,310,311,312}-django-{32,40,41,42}
+  py{310,311,312}-django-{50}
 
-  [gh-actions]
-  python =
-      3.8: py38
-      3.9: py39
-      3.10: py310
-      3.11: py311
-      3.12: py312
+[gh-actions]
+python =
+  3.8: py38
+  3.9: py39
+  3.10: py310
+  3.11: py311
+  3.12: py312
 
-  [testenv]
-  install_command =
-      pip install {opts} {packages}
-  setenv =
-      DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings
-  commands =
-      {envbindir}/django-admin collectstatic --noinput -v2
-      pytest {envsitepackagesdir}/eventlog
+[testenv]
+install_command =
+  pip install {opts} {packages}
+setenv =
+  DJANGO_SETTINGS_MODULE=eventlog.tests.testapp.settings
+commands =
+  {envbindir}/django-admin collectstatic --noinput -v2
+  pytest {envsitepackagesdir}/eventlog
 
-  deps=
-      django-32: django==3.2.*
-      django-40: django==4.0.*
-      django-41: django==4.1.*
-      django-42: django==4.2.*
-      django-50: django==5.0.*
-      pytest
-      pytest-django
+deps=
+  django-32: django==3.2.*
+  django-40: django==4.0.*
+  django-41: django==4.1.*
+  django-42: django==4.2.*
+  django-50: django==5.0.*
+  pytest
+  pytest-django
 """

@@ -33,7 +33,7 @@ class EventGroup:
         self.event_types = self.config.get_event_types()
         self.send_mail = send_mail
 
-        max_length = self.event_model._meta.get_field("group").max_length
+        max_length = self.event_model._meta.get_field("group").max_length  # noqa: SLF001 Private member
         if len(self.group_id) > max_length:
             msg = f"group_id must be at most {max_length} characters"
             raise TypeError(msg)
