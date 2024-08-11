@@ -2,25 +2,26 @@
 [![](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml/badge.svg)](https://github.com/bartTC/django-eventlog/actions/workflows/push.yml)
 [![](https://codecov.io/github/bartTC/django-eventlog/graph/badge.svg?token=YLXXbCawUQ)](https://codecov.io/github/bartTC/django-eventlog)
 
------
+---
 
 📖 **Full documentation: https://barttc.github.io/django-eventlog/**
 
-*Compatibility Matrix:*
+_Compatibility Matrix:_
 
 | Py/Dj     | 3.8 | 3.9 | 3.10 | 3.11 | 3.12 |
 | --------- | --- | --- | ---- | ---- | ---- |
-| 3.2 (LTS) |  ✓  |  ✓  |  ✓   |  ✓   |  ✓   |
-| 4.0       |  ✓  |  ✓  |  ✓   |  ✓   |  ✓   |
-| 4.1       |  ✓  |  ✓  |  ✓   |  ✓   |  ✓   |
-| 4.2 (LTS) |  ✓  |  ✓  |  ✓   |  ✓   |  ✓   |
-| 5.0       |  —  |  —  |  ✓   |  ✓   |  ✓   |
+| 3.2 (LTS) | ✓   | ✓   | ✓    | ✓    | ✓    |
+| 4.0       | ✓   | ✓   | ✓    | ✓    | ✓    |
+| 4.1       | ✓   | ✓   | ✓    | ✓    | ✓    |
+| 4.2 (LTS) | ✓   | ✓   | ✓    | ✓    | ✓    |
+| 5.0       | —   | —   | ✓    | ✓    | ✓    |
+| 5.1       | —   | —   | ✓    | ✓    | ✓    |
 
 # django-eventlog
 
 <img src="https://github.com/bartTC/django-eventlog/raw/main/docs/_static/logo.webp" alt="djang-eventlog Logo" width="300"/>
 
-django-eventlog is a very simple event logger you can use to track certain actions in 
+django-eventlog is a very simple event logger you can use to track certain actions in
 your code. Events are stored in a Django model and can be viewed in the Django Admin.
 
 Usage Example:
@@ -40,7 +41,7 @@ except Exception:
             initiator='Mailer Daemon')
 ```
 
-You can reuse an event group by specifying a group name and attach optional data. Data 
+You can reuse an event group by specifying a group name and attach optional data. Data
 must be JSON serializable.
 
 ```python
@@ -55,7 +56,7 @@ def subscribe_newsletter():
     e.info("User subscribed to newsletter on checkout", data={"email": "user@example.com"})
 ```
 
-Events can be grouped in a "Event Group" and when hovering over one item in the admin, 
+Events can be grouped in a "Event Group" and when hovering over one item in the admin,
 all events of the same group are highlighted:
 
 ![](https://github.com/bartTC/django-eventlog/raw/main/docs/_static/change_list.png)
@@ -65,9 +66,9 @@ can track the progress:
 
 ![](https://github.com/bartTC/django-eventlog/raw/main/docs/_static/change_form.png)
 
-While looking similar, it's not intended to be a replacement for your regular Python 
+While looking similar, it's not intended to be a replacement for your regular Python
 `logging` facility, rather an addition to it.
 
-django-eventlog stores it's data in a regular database model, so each log entry will 
-trigger a SQL Insert. Therefore you should be careful using it in high performance 
+django-eventlog stores it's data in a regular database model, so each log entry will
+trigger a SQL Insert. Therefore you should be careful using it in high performance
 and/or high volume environments.
