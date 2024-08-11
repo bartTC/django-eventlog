@@ -1,5 +1,9 @@
 # Changelog
 
+## WIP
+
+- Django 5.1 support
+
 ## 2.2 (2024-06-16)
 
 - Minor typo fixes
