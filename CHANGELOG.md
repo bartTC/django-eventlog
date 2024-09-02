@@ -1,6 +1,6 @@
 # Changelog
 
-## WIP
+## 2.2.1 (2024-09-02)
 
 - Django 5.1 support
 
