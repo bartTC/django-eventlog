@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import random
 from typing import TYPE_CHECKING, Any, Callable
 
 from django.apps import apps
@@ -26,7 +27,12 @@ class EventGroup:
         self,
         send_mail: str | None = None,
         group_id: str | None = None,
+        clean_frequency: int=0,
+        max_keep: int=0,
     ) -> None:
+        """
+        if max_keep > 0, every approxmately <clean_frequency> times the log event created, the number of events in the group will be checked
+        """
         self.event_model = apps.get_model("eventlog", "Event")
         self.config = apps.get_app_config("eventlog")
         self.group_id = group_id or self.config.generate_group_id()
@@ -37,6 +43,8 @@ class EventGroup:
         if len(self.group_id) > max_length:
             msg = f"group_id must be at most {max_length} characters"
             raise TypeError(msg)
+        self.max_keep = max_keep
+        self.clean_frequency = clean_frequency
 
     def __getattr__(self, attr: str) -> Callable:
         if self.event_types.by_name(attr):
@@ -60,6 +68,10 @@ class EventGroup:
         """Log a new event entry."""
 
         # Make sure, the data is JSON serializable, otherwise store it as a string.
+
+        if self.max_keep and self.clean_frequency:
+            if random.randrange(self.clean_frequency) == 0:
+                self.clean_old_events()
         if data:
             try:
                 json.dumps(data)
@@ -102,3 +114,16 @@ class EventGroup:
             from_email=self.config.email_from,
             fail_silently=self.config.email_fail_silently,
         )
+
+    @property
+    def event_qs(self):
+        return self.event_model.objects.filter(group=self.group_id)
+
+    def clean_old_events(self):
+        try:
+            last_keep_event = self.event_qs.order_by("-timestamp")[self.max_keep-1]
+        except Exception as error:
+            return
+        self.event_qs.filter(
+                timestamp__lt=last_keep_event.timestamp
+        ).delete()
