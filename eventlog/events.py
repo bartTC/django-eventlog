@@ -121,8 +121,8 @@ class EventGroup:
 
     def clean_old_events(self):
         try:
-            last_keep_event = self.event_qs.order_by("-timestamp")[self.max_keep-1]
-        except Exception as error:
+            last_keep_event = self.event_qs.order_by("-timestamp")[self.max_keep - 1]
+        except IndexError:
             return
         self.event_qs.filter(
                 timestamp__lt=last_keep_event.timestamp
