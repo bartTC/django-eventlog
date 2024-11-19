@@ -2,11 +2,12 @@
 
 # WIP
 
-- Python 3.13 support
+- Added support for Python 3.13 
+- Drop support for Django <= 4.1
 
 ## 2.2.1 (2024-09-02)
 
-- Django 5.1 support
+- Added support for Django 5.1
 
 ## 2.2 (2024-06-16)
 
