@@ -1,5 +1,9 @@
 # Changelog
 
+# WIP
+
+- Python 3.13 support
+
 ## 2.2.1 (2024-09-02)
 
 - Django 5.1 support

@@ -115,8 +115,8 @@ legacy_tox_ini = """
 toxworkdir=/tmp/tox/django-eventlog
 skip_missing_interpreters=True
 envlist=
-  py{38,39,310,311,312}-django-{32,40,41,42}
-  py{310,311,312}-django-{50,51}
+  py{39,310,311,312,313}-django-{32,40,41,42}
+  py{310,311,312,313}-django-{50,51}
 
 [gh-actions]
 python =
@@ -125,6 +125,7 @@ python =
   3.10: py310
   3.11: py311
   3.12: py312
+  3.13: py313
 
 [testenv]
 install_command =
