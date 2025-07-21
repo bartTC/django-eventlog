@@ -5,7 +5,7 @@ from django.core.management import call_command
 from pytest_django.fixtures import SettingsWrapper
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_no_pending_migrations() -> None:
     """
     Ensure there aer no pending migrations.
@@ -34,7 +34,7 @@ def test_no_pending_migrations() -> None:
         )
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_no_pending_migrations_if_autofield_differs(settings: SettingsWrapper) -> None:
     """
     If the base settings use a different autofield than the app,

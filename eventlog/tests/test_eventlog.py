@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from http import HTTPStatus
-from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
-from django.test import Client
 from django.urls import reverse
 from django.utils import timezone
 from pytest_django.asserts import assertContains, assertNotContains
@@ -13,8 +14,12 @@ from eventlog.datastructures import EventType
 from eventlog.events import EventGroup
 from eventlog.models import Event
 
+if TYPE_CHECKING:
+    from django.core.mail import EmailMessage
+    from django.test import Client
 
-@pytest.mark.django_db()
+
+@pytest.mark.django_db
 def test_multi_log() -> None:
     """Multiple log items."""
     from eventlog import EventGroup
@@ -28,7 +33,7 @@ def test_multi_log() -> None:
     assert Event.objects.count() == 4
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_multiuse_named_log() -> None:
     """Multiple log items, initialized twice with the same group id."""
     from eventlog import EventGroup
@@ -46,7 +51,7 @@ def test_multiuse_named_log() -> None:
     assert Event.objects.filter(group="abc").count() == 4
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_data_log() -> None:
     """Simple log item with data."""
     from eventlog import EventGroup
@@ -58,7 +63,7 @@ def test_data_log() -> None:
     assert Event.objects.count() == 2
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_unserializable_data_log() -> None:
     """Log item with data that's not JSON serializable."""
     from eventlog import EventGroup
@@ -75,8 +80,8 @@ def test_unserializable_data_log() -> None:
     assert "Foo object" in Event.objects.first().data
 
 
-@pytest.mark.django_db()
-def test_mail_per_event(mailoutbox: Any) -> None:
+@pytest.mark.django_db
+def test_mail_per_event(mailoutbox: list[EmailMessage]) -> None:
     """Send one mail per event."""
     from eventlog import EventGroup
     from eventlog.models import Event
@@ -90,8 +95,8 @@ def test_mail_per_event(mailoutbox: Any) -> None:
     assert len(mailoutbox) == 2
 
 
-@pytest.mark.django_db()
-def test_mail_per_group(mailoutbox: Any) -> None:
+@pytest.mark.django_db
+def test_mail_per_group(mailoutbox: list[EmailMessage]) -> None:
     """Set mail per group so it's sent for every event."""
     from eventlog import EventGroup
     from eventlog.models import Event
@@ -105,7 +110,7 @@ def test_mail_per_group(mailoutbox: Any) -> None:
     assert len(mailoutbox) == 4
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_admin_changelist(admin_client: Client) -> None:
     """
     Admin Changelist will render all events and legacy events
@@ -137,7 +142,7 @@ def test_admin_changelist(admin_client: Client) -> None:
     assertContains(response, "Legacy_Event")
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_admin_changeform(admin_client: Client) -> None:
     """Admin Changeform is OK."""
 
@@ -173,7 +178,7 @@ def test_admin_changeform(admin_client: Client) -> None:
     assertNotContains(response, "Hello World 4")
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_admin_changeform_delays(admin_client: Client) -> None:
     """
     Create a list of events, all minutes/days/years apart,

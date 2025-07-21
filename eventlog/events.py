@@ -49,7 +49,7 @@ class EventGroup:
         err = f'Event type "{attr}" does not exist.'
         raise TypeError(err)
 
-    def _log_event(  # noqa: PLR0913 Too many arguments
+    def _log_event(
         self,
         event_type: str,
         message: str,

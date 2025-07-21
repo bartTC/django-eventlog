@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "django-eventlog"
 version = "2.2.2"
-packages = [{include = "eventlog"}]
+packages = [{ include = "eventlog" }]
 description = "django-eventlog stores event messages in a Django model."
 authors = ["Martin Mahner <martin@mahner.org>"]
 license = "MIT"
@@ -42,7 +42,7 @@ pytest = "*"
 pytest-cov = "*"
 pytest-django = "*"
 ruff = "*"
-django-stubs = {extras = ["compatible-mypy"], version = "*"}
+django-stubs = { extras = ["compatible-mypy"], version = "*" }
 mkdocs-material = "*"
 mkdocs-include-markdown-plugin = "*"
 
@@ -54,31 +54,28 @@ target-version = "py38"
 exclude = ["migrations"]
 lint.select = ["ALL"]
 lint.ignore = [
-  "ANN101",   # Missing type annotation for `self`
-  "ANN401",   # typing.Any is disallowed as function arg type
-  "ARG001",   # Unused function argument (request, ...)
-  "ARG002",   # Unused method argument (*args, **kwargs)
-  "D",        # Missing or badly formatted docstrings
-  "E501",     # Line too long (>88)
-  "ERA001",   # Found commented-out code
-  "FBT",      # Flake Boolean Trap (don't use arg=True in functions)
-  "RUF012",   # Mutable class attributes should be annotated with `typing.ClassVar`
+    "ANN401", # typing.Any is disallowed as function arg type
+    "ARG001", # Unused function argument (request, ...)
+    "ARG002", # Unused method argument (*args, **kwargs)
+    "D", # Missing or badly formatted docstrings
+    "FBT", # Flake Boolean Trap (don't use arg=True in functions)
 
-  "COM812", # (ruff format) Checks for the absence of trailing commas
-  "ISC001", # (ruff format) Checks for implicitly concatenated strings on a single line
+    "COM812", # (ruff format) Checks for the absence of trailing commas
+    "ISC001", # (ruff format) Checks for implicitly concatenated strings on a single line
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"test_*.py"  = [
-  "S101",     # Use of `assert` detected
-  "PLR2004",  # Magic value used in comparison, consider replacing 200 with a constant variable
+"test_*.py" = [
+    "S101", # Use of `assert` detected
+    "PLR2004", # Magic value used in comparison, consider replacing 200 with a constant variable
+    "PLC0415", # `import` should be at the top-level of a file
 ]
 
 [tool.pytest.ini_options]
 python_files = [
-  "tests.py",
-  "test_*.py",
-  "*_tests.py",
+    "tests.py",
+    "test_*.py",
+    "*_tests.py",
 ]
 addopts = """
     --ds=eventlog.tests.testapp.settings
@@ -89,8 +86,8 @@ filterwarnings = ["ignore::RuntimeWarning"]
 
 [tool.coverage]
 run.omit = [
-  "eventlog/tests/*",
-  "eventlog/migrations/*",
+    "eventlog/tests/*",
+    "eventlog/migrations/*",
 ]
 report.exclude_lines = [
     "pragma: no cover",
